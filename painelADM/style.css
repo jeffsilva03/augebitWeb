@@ -1,10 +1,3 @@
-/* ===================================================================
-   style.css — Design Moderno e Profissional com Sidebar & Topnav
-   =================================================================== */
-
-/* ===================================================================
-   RESET & BASE
-   =================================================================== */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -38,9 +31,6 @@ button {
   cursor: pointer;
 }
 
-/* ===================================================================
-   VARIÁVEIS CSS
-   =================================================================== */
 :root {
   /* Cores */
   --fundo-principal: #f5f6fa;
@@ -70,40 +60,34 @@ button {
   --z-dropdown: 1000;
 }
 
-/* ===================================================================
-   HEADER & SIDEBAR - DESIGN MODERNO
-   =================================================================== */
 
-/* ===================================================================
-   VARIÁVEIS CSS - MELHORADAS
-   =================================================================== */
    :root {
-    /* Cores atualizadas */
+  
     --fundo-principal: #f5f6fa;
     --texto-principal: #2f3542;
     --texto-secundario: #57606f;
     
-    /* Novas cores de destaque - esquema mais moderno */
+ 
     --destaque-primario: #6366f1;         /* Indigo */
-    --destaque-secundario: #8b5cf6;       /* Violeta */
-    --destaque-terciario: #ec4899;        /* Rosa */
+    --destaque-secundario: #8b5cf6;       
+    --destaque-terciario: #ec4899;       
     --destaque-primario-dark: #4f46e5;
     --destaque-primario-light: #818cf8;
     
-    /* Cores de fundo melhoradas */
-    --fundo-sidebar: #1e293b;             /* Slate escuro */
-    --fundo-sidebar-hover: #334155;       /* Slate médio */
-    --fundo-sidebar-active: rgba(99, 102, 241, 0.15);  /* Indigo com transparência */
+   
+    --fundo-sidebar: #1e293b;            
+    --fundo-sidebar-hover: #334155;       
+    --fundo-sidebar-active: rgba(99, 102, 241, 0.15);  
     --fundo-topnav: #ffffff;
     --fundo-cartao: #ffffff;
     --fundo-cartao-hover: #f8fafc;
     
-    /* Bordas e sombras */
+  
     --border-light: #e2e8f0;
     --sidebar-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --topnav-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     
-    /* Dimensões refinadas */
+  
     --raio: 12px;
     --raio-sm: 8px;
     --raio-lg: 16px;
@@ -112,16 +96,14 @@ button {
     --shadow-light: 0 2px 8px rgba(0,0,0,0.05);
     --shadow-medium: 0 4px 16px rgba(0,0,0,0.1);
     --max-width: 1280px;
-    --sidebar-width: 270px;            /* Ligeiramente mais largo */
+    --sidebar-width: 270px;            
     --sidebar-collapsed: 80px;
-    --topnav-height: 70px;             /* Altura fixa para o topnav */
+    --topnav-height: 70px;            
     --mobile-break: 768px;
     --z-dropdown: 1000;
   }
   
-  /* ===================================================================
-     LAYOUT: WRAPPER & SIDEBAR - REFINADO
-     =================================================================== */
+
   .wrapper {
     display: flex;
     width: 100%;
@@ -268,7 +250,7 @@ button {
     color: var(--destaque-secundario);
   }
   
-  /* Adicionar ícones com SVG inline */
+
   .sidebar-nav li:nth-child(1) .icon::before {
     content: '';
     width: 20px;
@@ -296,7 +278,7 @@ button {
     background-size: contain;
   }
   
-  /* Estilo para quando o sidebar estiver recolhido */
+
   .sidebar.collapsed .sidebar-nav a span {
     opacity: 0;
     transition: opacity var(--transition);
@@ -311,7 +293,7 @@ button {
     margin-right: 0;
   }
   
-  /* Adicionar botão para toggle do sidebar */
+
   .btn-toggle-sidebar {
     position: absolute;
     bottom: 1rem;
@@ -349,9 +331,8 @@ button {
     transform: rotate(180deg);
   }
   
-  /* ===================================================================
-     TOPNAV: HEADER SUPERIOR - REDESENHADO
-     =================================================================== */
+
+  
   .main-content {
     margin-left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
@@ -506,9 +487,7 @@ button {
     border: 2px solid var(--fundo-topnav);
   }
   
-  /* ===================================================================
-     RESPONSIVIDADE PARA HEADER E SIDEBAR
-     =================================================================== */
+
   @media (max-width: var(--mobile-break)) {
     .sidebar {
       transform: translateX(-100%);
@@ -538,7 +517,7 @@ button {
       display: none;
     }
     
-    /* Mostrar toggle para mobile */
+    
     .btn-mobile-toggle {
       display: flex !important;
       align-items: center;
@@ -590,9 +569,9 @@ button {
       transform: rotate(-45deg);
     }
   }
-/* ===================================================================
-   MAIN CONTAINER
-   =================================================================== */
+
+  
+
 .container {
   max-width: var(--max-width);
   margin: var(--padding-global) auto;
@@ -607,9 +586,7 @@ button {
   }
 }
 
-/* ===================================================================
-   CARD COMPONENT
-   =================================================================== */
+
 .card {
   background: var(--fundo-cartao);
   border-radius: var(--raio);
@@ -627,9 +604,7 @@ button {
   color: var(--destaque-roxo-dark);
 }
 
-/* ===================================================================
-   ALERT COMPONENT
-   =================================================================== */
+
 .alerta {
   padding: 1rem;
   border-radius: var(--raio);
@@ -645,9 +620,7 @@ button {
   color: var(--error-text);
 }
 
-/* ===================================================================
-   FORMULÁRIO & CONTROLES
-   =================================================================== */
+
 .formulario {
   display: flex;
   flex-direction: column;
@@ -694,9 +667,7 @@ button {
   transform: scale(1.02);
 }
 
-/* ===================================================================
-   TABLES
-   =================================================================== */
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -731,9 +702,7 @@ tr:hover {
   transform: scaleX(1);
 }
 
-/* ===================================================================
-   TYPOGRAPHY
-   =================================================================== */
+
 h1, h2, h3, h4, h5, h6 {
   color: var(--texto-principal);
   margin-bottom: 0.5rem;
@@ -747,16 +716,11 @@ small {
   color: var(--texto-secundario);
 }
 
-/* ===================================================================
-   UTILITIES: MARGIN & PADDING
-   =================================================================== */
+
 .u-m-0 { margin: 0 !important; }
 .u-mt-1 { margin-top: 1rem !important; }
-/* ... (demais utilities conforme seu original) ... */
 
-/* ===================================================================
-   COMPONENT: BADGES & TAGS
-   =================================================================== */
+
 .badge {
   display: inline-block;
   padding: 0.25em 0.5em;
@@ -768,9 +732,7 @@ small {
 .badge-error   { background: var(--error-bg); color: var(--error-text); }
 .badge-info    { background: var(--destaque-roxo); color: #fff; }
 
-/* ===================================================================
-   COMPONENT: MODAL & TOOLTIP
-   =================================================================== */
+
 .modal-backdrop {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.5);
@@ -861,7 +823,8 @@ small {
   color: #fff;
   font-weight: 500;
 }
-/* Gradientes para cards */
+
+
 .bg-azul     { background: linear-gradient(135deg, #007bff, #339af0); }
 .bg-verde    { background: linear-gradient(135deg, #28a745, #51cf66); }
 .bg-amarelo  { background: linear-gradient(135deg, #ffc107, #ffe066); }
@@ -869,9 +832,7 @@ small {
 .bg-laranja  { background: linear-gradient(135deg, #fd7e14, #ffa94d); }
 .bg-vermelho { background: linear-gradient(135deg, #dc3545, #ff6b6b); }
 
-/* ===================================================================
-   DASHBOARD CHART GRID
-   =================================================================== */
+
 .charts-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -891,9 +852,7 @@ small {
   height: 300px !important;
 }
 
-/* ===================================================================
-   ÍCONES & TÍTULO DO PAINEL
-   =================================================================== */
+
 .icon-dashboard {
   width: 2.5rem;
   height: 2.5rem;
@@ -1177,7 +1136,7 @@ button, input, select, textarea {
   height: 18px;
 }
 
-/* Info Banner */
+
 .info-banner {
   display: flex;
   align-items: center;
@@ -1233,7 +1192,7 @@ button, input, select, textarea {
   height: 16px;
 }
 
-/* Dashboard Overview KPIs */
+/* Dashboard */
 .dashboard-overview {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -1341,7 +1300,7 @@ button, input, select, textarea {
   height: 16px;
 }
 
-/* Dashboard Grid Cards */
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -1424,7 +1383,7 @@ button, input, select, textarea {
   color: white;
 }
 
-/* Backgrounds gradientes */
+
 .bg-azul-gradient {
   background: var(--gradient-azul);
 }
@@ -1449,14 +1408,14 @@ button, input, select, textarea {
   background: var(--gradient-vermelho);
 }
 
-/* Icon Dashboard */
+
 .icon-dashboard {
   width: 2.5rem;
   height: 2.5rem;
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* Charts Section */
+
 .charts-section {
   display: grid;
   grid-template-columns: 1fr;
@@ -1526,22 +1485,22 @@ button, input, select, textarea {
 
 
 
-/* faz o <canvas> ocupar 100% da altura do container */
+
 .chart-container canvas {
   width: 100% !important;
   height: 100% !important;
 }
 
-/* para os cards de gráfico que usam grid-flex (ApexCharts etc) */
+
 .full-width-chart .chart-card,
 .charts-grid .chart-card {
   display: flex;
   flex-direction: column;
 }
 
-/* para o div do ApexCharts */
+
 #crescimentoChart {
-  flex: 1;            /* expande para preencher a altura do card */
+  flex: 1;            
 }
 
 
@@ -1554,7 +1513,8 @@ button, input, select, textarea {
   position: relative;
 }
 
-/* Full Width Chart */
+
+
 .full-width-chart {
   margin-bottom: var(--spacing-8);
 }
@@ -1585,7 +1545,8 @@ button, input, select, textarea {
   box-shadow: var(--shadow-sm);
 }
 
-/* Dashboard Footer */
+
+
 .dashboard-footer {
   display: flex;
   justify-content: space-between;
@@ -1674,7 +1635,7 @@ button, input, select, textarea {
   background: rgba(139, 92, 246, 0.5);
 }
 
-/* Media Queries */
+
 @media (max-width: 768px) {
   .dashboard-header {
     flex-direction: column;
@@ -1702,7 +1663,7 @@ button, input, select, textarea {
   }
 }
 
-/* Adição de glass morphism para elementos importantes */
+
 .glass-morphism {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -1721,9 +1682,7 @@ button, input, select, textarea {
 
 
 
-/* === Seção de Inscrição em Curso (re-design completo) === */
 
-/* === Seção de Inscrição em Curso — Estilo Premium === */
 .inscricao-curso {
   display: flex;
   justify-content: center;
@@ -1869,7 +1828,7 @@ button, input, select, textarea {
   transition: 0s;
 }
 
-/* Responsivo */
+
 @media (max-width: 600px) {
   .inscricao-curso { padding: 2rem 1rem; }
   .inscricao-curso .card { padding: 2rem 1.5rem; }

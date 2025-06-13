@@ -1,5 +1,4 @@
 <?php
-// criar_curso.php
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 session_start();
@@ -9,14 +8,16 @@ $sucesso = false;
 $instrutor_id = $_SESSION['usuario_id'] ?? null;
 $errors = [];
 
-// Verifica sessão
+
+
 if (!$instrutor_id) {
     $errors[] = "Instrutor não autenticado.";
 }
 
-// Processa formulário se for POST
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Captura e valida campos
+  
     $titulo    = trim($_POST['titulo']    ?? '');
     $descricao = trim($_POST['descricao'] ?? '');
     $category  = trim($_POST['category']  ?? '');
@@ -28,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $grad2     = trim($_POST['grad2']     ?? '');
     $icon      = trim($_POST['icon']      ?? '');
 
-    // Validações
+   
+    
     if (mb_strlen($titulo) < 3)     $errors[] = "Título muito curto (mínimo 3 caracteres).";
     if (mb_strlen($descricao) < 20) $errors[] = "Descrição muito curta (mínimo 20 caracteres).";
     if ($rating === null || $rating < 0 || $rating > 5) $errors[] = "Avaliação inválida.";
@@ -37,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$icon)                                         $errors[] = "Selecione um ícone para o curso.";
 
     if (empty($errors)) {
-        // Insere no banco
+      
         $gradient_json = json_encode([$grad1, $grad2]);
         $sql = "INSERT INTO cursos
           (instrutor_id, titulo, descricao, duration, level, category, gradient, icon, rating, students, criado_em)
@@ -63,7 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sucesso = true;
     }
 } else {
-    // Valores padrão para GET
+  
+  
     $titulo = $descricao = $category = $level = $duration = '';
     $rating = 0;
     $students = 0;
@@ -96,7 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
   <?php endif; ?>
 
-  <!-- Container para notificações flutuantes -->
+ 
+  
   <div class="notifications-container" id="notifications"></div>
 
   <!-- Header -->
@@ -112,9 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </header>
 
-  <!-- Main Content -->
+
   <main class="container fade-in">
-    <!-- Breadcrumb -->
+
     <nav class="breadcrumb">
       <a href="painel_instrutor.php">
         <i class="fas fa-tachometer-alt"></i>
@@ -129,10 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </span>
     </nav>
 
-    <!-- Main Form -->
+    
     <form class="form" id="courseForm" method="POST" action="criar_curso.php">
       
-      <!-- Informações Básicas -->
+      
       <div class="card slide-up">
         <div class="card-header">
           <h2 class="card-title">
@@ -152,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               Dados Principais
             </h3>
             
-            <!-- Título -->
+            
             <div class="form-group">
               <label class="label label-required" for="titulo">
                 <i class="fas fa-heading label-icon"></i>
@@ -175,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <div class="char-counter" id="titleCounter">0/255</div>
             </div>
 
-            <!-- Descrição -->
+            
             <div class="form-group">
               <label class="label label-required" for="descricao">
                 <i class="fas fa-align-left label-icon"></i>
@@ -198,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
-      <!-- Configurações do Curso -->
+ 
       <div class="card slide-up">
         <div class="card-header">
           <h2 class="card-title">
@@ -219,7 +223,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </h3>
             
             <div class="form-row-3">
-              <!-- Categoria -->
               <div class="form-group">
                 <label class="label" for="category">
                   <i class="fas fa-tags label-icon"></i>
@@ -239,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </select>
               </div>
 
-              <!-- Nível -->
+              
               <div class="form-group">
                 <label class="label" for="level">
                   <i class="fas fa-signal label-icon"></i>
@@ -254,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </select>
               </div>
 
-              <!-- Duração -->
+              
               <div class="form-group">
                 <label class="label" for="duration">
                   <i class="fas fa-clock label-icon"></i>
@@ -278,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
-      <!-- Estatísticas e Avaliação -->
+     
       <div class="card slide-up">
         <div class="card-header">
           <h2 class="card-title">
@@ -299,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </h3>
             
             <div class="form-row">
-              <!-- Rating -->
+              
               <div class="form-group">
                 <label class="label" for="rating">
                   <i class="fas fa-star label-icon"></i>
@@ -324,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
               </div>
 
-              <!-- Número de Estudantes -->
+              
               <div class="form-group">
                 <label class="label" for="students">
                   <i class="fas fa-users label-icon"></i>
@@ -349,7 +352,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
-      <!-- Personalização Visual -->
+     
       <div class="card slide-up">
         <div class="card-header">
           <h2 class="card-title">
@@ -369,7 +372,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               Aparência
             </h3>
             
-            <!-- Gradiente de Cores -->
+          
             <div class="form-group">
               <label class="label" for="gradient">
                 <i class="fas fa-fill-drip label-icon"></i>
@@ -387,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </div>
             </div>
 
-            <!-- Seletor de Ícone -->
+           
             <div class="form-group">
               <label class="label" for="icon">
                 <i class="fas fa-icons label-icon"></i>
@@ -453,7 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
-      <!-- Botões de Ação -->
+    
       <div class="card slide-up">
         <div class="card-body">
           <div class="button-group">
@@ -472,7 +475,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </main>
 
   <script>
-    // Character counters
     const titleInput = document.getElementById('titulo');
     const titleCounter = document.getElementById('titleCounter');
     const descInput = document.getElementById('descricao');
@@ -493,11 +495,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     titleInput.addEventListener('input', updateTitleCounter);
     descInput.addEventListener('input', updateDescCounter);
     
-    // Initialize counters
+   
     updateTitleCounter();
     updateDescCounter();
 
-    // Rating range slider
+  
     const ratingSlider = document.getElementById('rating');
     const ratingValue = document.getElementById('ratingValue');
 
@@ -505,7 +507,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       ratingValue.textContent = parseFloat(this.value).toFixed(1);
     });
 
-    // Color gradient picker
+    
     const color1 = document.getElementById('color1');
     const color2 = document.getElementById('color2');
     const gradientPreview = document.getElementById('gradientPreview');
@@ -519,23 +521,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     color1.addEventListener('change', updateGradient);
     color2.addEventListener('change', updateGradient);
-    updateGradient(); // Initialize
+    updateGradient(); 
 
-    // Icon selector
+    
     const iconOptions = document.querySelectorAll('.icon-option');
     const iconInput = document.getElementById('icon');
 
     iconOptions.forEach(option => {
-      // Check if this icon should be selected based on PHP value
       if (option.dataset.icon === iconInput.value) {
         option.classList.add('selected');
       }
       
       option.addEventListener('click', function() {
-        // Remove selected class from all options
         iconOptions.forEach(opt => opt.classList.remove('selected'));
         
-        // Add selected class to clicked option
+        
         this.classList.add('selected');
         
         // Set the value
@@ -555,7 +555,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
 
-    // Add smooth animations on scroll
+   
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -569,7 +569,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       observer.observe(card);
     });
 
-    // Sistema de notificações aprimorado
+   
     function showNotification(type, title, description) {
       const notifications = {
         success: {
@@ -606,7 +606,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
       container.appendChild(notificationEl);
       
-      // Auto remove após 5 segundos
+      
       setTimeout(() => {
         if (notificationEl.parentElement) {
           removeNotification(notificationEl.querySelector('.status-close'));
@@ -624,7 +624,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }, 400);
     }
 
-    // Função para mostrar sucesso após criação do curso
+   
     function showSuccessAndReset() {
       showNotification(
         'success', 
@@ -632,7 +632,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'Seu curso foi salvo e está disponível no painel do instrutor.'
       );
       
-      // Limpa o formulário após 2 segundos
+      
       setTimeout(() => {
         document.getElementById('courseForm').reset();
         iconOptions.forEach(opt => opt.classList.remove('selected'));
@@ -644,7 +644,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }, 2000);
     }
 
-    // Verifica se o curso foi criado com sucesso
+    
     <?php if (isset($sucesso) && $sucesso): ?>
     showSuccessAndReset();
     <?php endif; ?>

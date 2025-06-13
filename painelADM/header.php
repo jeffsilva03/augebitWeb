@@ -1,5 +1,4 @@
 <?php 
-// adm/header.php
 if (session_status()===PHP_SESSION_NONE) session_start();
 ?>
 <div class="wrapper">
@@ -26,7 +25,6 @@ if (session_status()===PHP_SESSION_NONE) session_start();
 
   <div class="main-content">
     <header class="topnav">
-      <!-- Botão toggle para mobile (inicialmente oculto no CSS) -->
       <button type="button" class="btn-mobile-toggle" id="mobile-toggle">
         <span></span>
       </button>
@@ -41,30 +39,28 @@ if (session_status()===PHP_SESSION_NONE) session_start();
     </header>
 
     <script>
-      // Script para controlar o toggle da sidebar
 document.addEventListener('DOMContentLoaded', function() {
-    // Toggle da sidebar desktop
     const toggleSidebarBtn = document.getElementById('toggle-sidebar');
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
     
-    // Verificar se já existe preferência salva
+    
     const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
     
-    // Aplicar estado inicial com base na preferência salva
+
     if (sidebarCollapsed) {
         sidebar.classList.add('collapsed');
     }
     
-    // Adicionar evento de clique ao botão de toggle
+   
     toggleSidebarBtn.addEventListener('click', function() {
         sidebar.classList.toggle('collapsed');
         
-        // Salvar preferência do usuário
+       
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
     });
     
-    // Toggle de mobile
+   
     const mobileToggleBtn = document.getElementById('mobile-toggle');
     const body = document.body;
     
@@ -85,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Fechar o menu quando redimensionar a janela
     window.addEventListener('resize', function() {
         if (window.innerWidth >= 768) {
             sidebar.classList.remove('mobile-visible');

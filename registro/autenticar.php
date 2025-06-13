@@ -34,7 +34,6 @@ if (isset($_POST['email'], $_POST['senha'])) {
                     break;
                 case 'usuarioGeral':
                 default:
-                    // Redirecionar usuários gerais para a listagem de cursos
                     header('Location: ../listaCursos/listagemCursos.php');
             }
             exit();

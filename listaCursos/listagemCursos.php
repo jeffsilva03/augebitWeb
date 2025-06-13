@@ -1,18 +1,14 @@
 <?php
-// 1) Chamamos session_start() o mais cedo possível
 session_start();
 
-// 2) Verificamos se o usuário está logado e puxamos o perfil
 if (!isset($_SESSION['usuario_id'], $_SESSION['perfil'])) {
     header('Location: ../login/form_login.php');
     exit;
 }
-$meuPerfil = $_SESSION['perfil']; //
+$meuPerfil = $_SESSION['perfil'];
 
-// Incluir arquivo de conexão
 require_once '../arquivosReuso/conexao.php';
 
-// Buscar todos os cursos com informações do instrutor
 $sql = "SELECT c.*, ca.nome as instrutor_nome 
         FROM cursos c 
         INNER JOIN cadastro ca ON c.instrutor_id = ca.id 
@@ -26,7 +22,6 @@ if ($result && $result->num_rows > 0) {
     }
 }
 
-// Função para mapear categoria para ícone
 function getCategoryIcon($category) {
     $icons = [
         'tech' => 'fas fa-microchip',
@@ -40,7 +35,6 @@ function getCategoryIcon($category) {
     return isset($icons[$category]) ? $icons[$category] : 'fas fa-book';
 }
 
-// Função para mapear categoria para nome em português
 function getCategoryName($category) {
     $names = [
         'tech' => 'Tecnologia',
@@ -54,7 +48,6 @@ function getCategoryName($category) {
     return isset($names[$category]) ? $names[$category] : 'Geral';
 }
 
-// Função para gerar imagem padrão baseada no gradiente
 function getGradientStyle($gradient) {
     if (!empty($gradient)) {
         $colors = json_decode($gradient, true);
@@ -62,7 +55,6 @@ function getGradientStyle($gradient) {
             return "background: linear-gradient(135deg, {$colors[0]}, {$colors[1]});";
         }
     }
-    // Gradientes mais variados baseados na categoria
     $defaultGradients = [
         'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -75,19 +67,52 @@ function getGradientStyle($gradient) {
     return 'background: ' . $defaultGradients[array_rand($defaultGradients)] . ';';
 }
 
-// Função para formatar duração
 function formatDuration($duration) {
     if (!$duration) return '40h';
     return $duration;
 }
 
-// Incluir header
+function generateCourseLink($curso, $perfil) {
+    // Verificar se o ID do curso existe
+    if (!isset($curso['id']) || empty($curso['id'])) {
+        return ['link' => '#', 'texto' => 'Indisponível', 'disabled' => true];
+    }
+    
+    // Definir o link e texto baseado no perfil
+    switch ($perfil) {
+        case 'usuarioGeral':
+            return [
+                'link' => 'curso.php?id=' . urlencode($curso['id']),
+                'texto' => 'Ver Detalhes',
+                'disabled' => false
+            ];
+        case 'instrutor':
+            return [
+                'link' => 'curso.php?id=' . urlencode($curso['id']),
+                'texto' => 'Gerenciar Curso',
+                'disabled' => false
+            ];
+        case 'admin':
+            return [
+                'link' => 'curso.php?id=' . urlencode($curso['id']),
+                'texto' => 'Acessar Curso',
+                'disabled' => false
+            ];
+        default:
+            return [
+                'link' => 'curso.php?id=' . urlencode($curso['id']),
+                'texto' => 'Ver Curso',
+                'disabled' => false
+            ];
+    }
+}
+
 include_once '../arquivosReuso/header.php';
 ?>
 
+<link rel="icon" href="src/icone.ico" type="image/x-icon">
 <link rel="stylesheet" href="listagemCursos.css">
 
-<!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
         <div class="hero-content">
@@ -117,7 +142,6 @@ include_once '../arquivosReuso/header.php';
 </section>
 
 <div class="container">
-    <!-- Seção de Filtros -->
     <section class="filters-section">
         <div class="filters-container">
             <div class="filters-header">
@@ -173,7 +197,6 @@ include_once '../arquivosReuso/header.php';
         </div>
     </section>
 
-    <!-- Seção de Cursos -->
     <section class="courses-section">
         <div class="section-header">
             <div class="results-info">
@@ -190,13 +213,11 @@ include_once '../arquivosReuso/header.php';
             </div>
         </div>
 
-        <!-- Loading State -->
         <div class="loading" id="loadingState">
             <div class="spinner"></div>
             <p>Carregando cursos...</p>
         </div>
 
-        <!-- Grid de Cursos -->
         <div class="cursos-grid" id="cursosGrid">
             <?php if (empty($cursos)): ?>
                 <div class="empty-state">
@@ -206,13 +227,15 @@ include_once '../arquivosReuso/header.php';
                 </div>
             <?php else: ?>
                 <?php foreach ($cursos as $index => $curso): ?>
+                    <?php $linkInfo = generateCourseLink($curso, $meuPerfil); ?>
                     <article class="course-card" 
                              data-title="<?php echo strtolower(htmlspecialchars($curso['titulo'])); ?>"
                              data-category="<?php echo htmlspecialchars($curso['category'] ?? ''); ?>"
                              data-level="<?php echo htmlspecialchars($curso['level'] ?? ''); ?>"
                              data-rating="<?php echo htmlspecialchars($curso['rating'] ?? '4.5'); ?>"
                              data-students="<?php echo htmlspecialchars($curso['students'] ?? '0'); ?>"
-                             data-created="<?php echo htmlspecialchars($curso['criado_em']); ?>">
+                             data-created="<?php echo htmlspecialchars($curso['criado_em']); ?>"
+                             data-course-id="<?php echo htmlspecialchars($curso['id']); ?>">
                         
                         <div class="course-badges">
                             <?php if ($index === 0): ?>
@@ -236,7 +259,9 @@ include_once '../arquivosReuso/header.php';
                                 <?php echo getCategoryName($curso['category'] ?? ''); ?>
                             </div>
                             
-                            <h2 class="course-title"><?php echo htmlspecialchars($curso['titulo']); ?></h2>
+                            <h2 class="course-title" data-original="<?php echo htmlspecialchars($curso['titulo']); ?>">
+                                <?php echo htmlspecialchars($curso['titulo']); ?>
+                            </h2>
                             
                             <p class="course-description">
                                 <?php echo htmlspecialchars(!empty($curso['descricao']) ? $curso['descricao'] : 'Aprenda com os melhores profissionais do mercado e desenvolva habilidades essenciais para sua carreira.'); ?>
@@ -265,16 +290,13 @@ include_once '../arquivosReuso/header.php';
                                 <div class="course-level"><?php echo htmlspecialchars($curso['level'] ?? 'Intermediário'); ?></div>
                             </div>
                             
-                          <?php
-// Determinar o link baseado no perfil do usuário
-$linkCurso = ($meuPerfil === 'usuarioGeral') 
-    ? "../curso/usuarioGeral/pagamento-curso.php?id=" . $curso['id']
-    : "curso-detalhes.php?id=" . $curso['id'];
-?>
-<a href="<?php echo $linkCurso; ?>" class="course-button">
-    <i class="fas fa-play"></i>
-    <?php echo ($meuPerfil === 'usuarioGeral') ? 'Ver Detalhes' : 'Acessar Curso'; ?>
-</a>
+                            <a href="<?php echo htmlspecialchars($linkInfo['link']); ?>" 
+                               class="course-button <?php echo $linkInfo['disabled'] ? 'disabled' : ''; ?>"
+                               <?php echo $linkInfo['disabled'] ? 'onclick="return false;"' : ''; ?>
+                               data-course-id="<?php echo htmlspecialchars($curso['id']); ?>">
+                                <i class="fas fa-play"></i>
+                                <?php echo htmlspecialchars($linkInfo['texto']); ?>
+                            </a>
                         </div>
                     </article>
                 <?php endforeach; ?>
@@ -284,248 +306,262 @@ $linkCurso = ($meuPerfil === 'usuarioGeral')
 </div>
 
 <script>
-    // Funcionalidade de filtros e busca
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search');
-        const categorySelect = document.getElementById('category');
-        const levelSelect = document.getElementById('level');
-        const sortSelect = document.getElementById('sort');
-        const cursosGrid = document.getElementById('cursosGrid');
-        const resultsCount = document.getElementById('resultsCount');
-        const loadingState = document.getElementById('loadingState');
-        const viewButtons = document.querySelectorAll('.view-btn');
-        
-        const allCards = Array.from(cursosGrid.children).filter(card => 
-            !card.classList.contains('empty-state') && !card.classList.contains('loading')
-        );
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search');
+    const categorySelect = document.getElementById('category');
+    const levelSelect = document.getElementById('level');
+    const sortSelect = document.getElementById('sort');
+    const cursosGrid = document.getElementById('cursosGrid');
+    const resultsCount = document.getElementById('resultsCount');
+    const loadingState = document.getElementById('loadingState');
+    const viewButtons = document.querySelectorAll('.view-btn');
+    
+    const allCards = Array.from(cursosGrid.children).filter(card => 
+        !card.classList.contains('empty-state') && !card.classList.contains('loading')
+    );
 
-        // Função para mostrar loading
-        function showLoading() {
-            loadingState.classList.add('show');
-            cursosGrid.style.display = 'none';
-        }
-
-        // Função para esconder loading
-        function hideLoading() {
-            loadingState.classList.remove('show');
-            cursosGrid.style.display = 'grid';
-        }
-
-        // Função principal de filtro e ordenação
-        function filterAndSort() {
-            showLoading();
+    // Debug: Adicionar logs para verificar se os links estão funcionando
+    document.querySelectorAll('.course-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const courseId = this.getAttribute('data-course-id');
+            const href = this.getAttribute('href');
             
-            // Simular delay de loading para UX
-            setTimeout(() => {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                const selectedCategory = categorySelect.value;
-                const selectedLevel = levelSelect.value;
-                const sortBy = sortSelect.value;
-
-                // Filtrar cards
-                let filteredCards = allCards.filter(card => {
-                    const title = card.dataset.title || '';
-                    const category = card.dataset.category || '';
-                    const level = card.dataset.level || '';
-
-                    const matchesSearch = !searchTerm || title.includes(searchTerm);
-                    const matchesCategory = !selectedCategory || category === selectedCategory;
-                    const matchesLevel = !selectedLevel || level === selectedLevel;
-
-                    return matchesSearch && matchesCategory && matchesLevel;
-                });
-
-                // Ordenar cards
-                filteredCards.sort((a, b) => {
-                    switch(sortBy) {
-                        case 'oldest':
-                            return new Date(a.dataset.created) - new Date(b.dataset.created);
-                        case 'rating':
-                            return parseFloat(b.dataset.rating || 0) - parseFloat(a.dataset.rating || 0);
-                        case 'students':
-                            return parseInt(b.dataset.students || 0) - parseInt(a.dataset.students || 0);
-                        case 'alphabetical':
-                            return (a.dataset.title || '').localeCompare(b.dataset.title || '');
-                        case 'newest':
-                        default:
-                            return new Date(b.dataset.created) - new Date(a.dataset.created);
-                    }
-                });
-
-                // Limpar grid
-                cursosGrid.innerHTML = '';
-
-                // Adicionar cards filtrados e ordenados
-                if (filteredCards.length > 0) {
-                    filteredCards.forEach((card, index) => {
-                        // Adicionar animação de entrada
-                        card.style.opacity = '0';
-                        card.style.transform = 'translateY(20px)';
-                        cursosGrid.appendChild(card);
-                        
-                        // Animar entrada
-                        setTimeout(() => {
-                            card.style.transition = 'all 0.3s ease';
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        }, index * 50);
-                    });
-                } else {
-                    cursosGrid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-search"></i>
-                            <h3>Nenhum curso encontrado</h3>
-                            <p>Tente ajustar os filtros de busca ou explore outras categorias.</p>
-                        </div>
-                    `;
-                }
-
-                // Atualizar contador
-                resultsCount.textContent = filteredCards.length;
-                
-                hideLoading();
-            }, 300);
-        }
-
-        // Event listeners para filtros
-        searchInput.addEventListener('input', debounce(filterAndSort, 300));
-        categorySelect.addEventListener('change', filterAndSort);
-        levelSelect.addEventListener('change', filterAndSort);
-        sortSelect.addEventListener('change', filterAndSort);
-
-        // Toggle de visualização
-        viewButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                viewButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const view = btn.dataset.view;
-                if (view === 'list') {
-                    cursosGrid.style.gridTemplateColumns = '1fr';
-                    cursosGrid.querySelectorAll('.course-card').forEach(card => {
-                        card.style.flexDirection = 'row';
-                        card.style.height = 'auto';
-                        const img = card.querySelector('.course-image');
-                        if (img) img.style.width = '200px';
-                    });
-                } else {
-                    cursosGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(350px, 1fr))';
-                    cursosGrid.querySelectorAll('.course-card').forEach(card => {
-                        card.style.flexDirection = 'column';
-                        card.style.height = 'auto';
-                        const img = card.querySelector('.course-image');
-                        if (img) img.style.width = '100%';
-                    });
-                }
-            });
-        });
-
-        // Função debounce para otimizar performance
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Animação de hover nos cards
-        const courseCards = document.querySelectorAll('.course-card');
-        courseCards.forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
+            console.log('Clique no botão do curso:', {
+                courseId: courseId,
+                href: href,
+                isDisabled: this.classList.contains('disabled')
             });
             
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Scroll suave para filtros ao carregar
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        });
-
-        // Observar cards para animação de scroll
-        courseCards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.6s ease';
-            observer.observe(card);
-        });
-
-        // Auto-complete para busca (opcional)
-        const coursesTitles = allCards.map(card => 
-            card.querySelector('.course-title')?.textContent || ''
-        ).filter(Boolean);
-
-        searchInput.addEventListener('focus', function() {
-            this.setAttribute('list', 'course-suggestions');
-            
-            // Criar datalist se não existir
-            if (!document.getElementById('course-suggestions')) {
-                const datalist = document.createElement('datalist');
-                datalist.id = 'course-suggestions';
-                coursesTitles.forEach(title => {
-                    const option = document.createElement('option');
-                    option.value = title;
-                    datalist.appendChild(option);
-                });
-                document.body.appendChild(datalist);
+            if (this.classList.contains('disabled')) {
+                e.preventDefault();
+                alert('Este curso não está disponível no momento.');
+                return false;
             }
-        });
-
-        // Destacar termo de busca nos resultados
-        function highlightSearchTerm(text, term) {
-            if (!term) return text;
-            const regex = new RegExp(`(${term})`, 'gi');
-            return text.replace(regex, '<mark>$1</mark>');
-        }
-
-        // Aplicar destaque quando houver busca
-        searchInput.addEventListener('input', function() {
-            const term = this.value.trim();
-            setTimeout(() => {
-                cursosGrid.querySelectorAll('.course-title').forEach(title => {
-                    const originalText = title.getAttribute('data-original') || title.textContent;
-                    if (!title.getAttribute('data-original')) {
-                        title.setAttribute('data-original', originalText);
-                    }
-                    title.innerHTML = highlightSearchTerm(originalText, term);
-                });
-            }, 350);
+            
+            if (href === '#' || !href) {
+                e.preventDefault();
+                alert('Link do curso não está configurado corretamente.');
+                return false;
+            }
         });
     });
 
-    // Adicionar estilos dinâmicos para o highlight
-    const style = document.createElement('style');
-    style.textContent = `
-        mark {
-            background: linear-gradient(135deg, #fef3c7, #fbbf24);
-            color: #92400e;
-            padding: 0.125rem 0.25rem;
-            border-radius: 4px;
-            font-weight: 600;
-        }
+    function showLoading() {
+        loadingState.classList.add('show');
+        cursosGrid.style.display = 'none';
+    }
+
+    function hideLoading() {
+        loadingState.classList.remove('show');
+        cursosGrid.style.display = 'grid';
+    }
+
+    function filterAndSort() {
+        showLoading();
         
-        .course-card:hover mark {
-            background: linear-gradient(135deg, #ddd6fe, #8b5cf6);
-            color: white;
+        setTimeout(() => {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const selectedCategory = categorySelect.value;
+            const selectedLevel = levelSelect.value;
+            const sortBy = sortSelect.value;
+
+            let filteredCards = allCards.filter(card => {
+                const title = card.dataset.title || '';
+                const category = card.dataset.category || '';
+                const level = card.dataset.level || '';
+
+                const matchesSearch = !searchTerm || title.includes(searchTerm);
+                const matchesCategory = !selectedCategory || category === selectedCategory;
+                const matchesLevel = !selectedLevel || level === selectedLevel;
+
+                return matchesSearch && matchesCategory && matchesLevel;
+            });
+
+            filteredCards.sort((a, b) => {
+                switch(sortBy) {
+                    case 'oldest':
+                        return new Date(a.dataset.created) - new Date(b.dataset.created);
+                    case 'rating':
+                        return parseFloat(b.dataset.rating || 0) - parseFloat(a.dataset.rating || 0);
+                    case 'students':
+                        return parseInt(b.dataset.students || 0) - parseInt(a.dataset.students || 0);
+                    case 'alphabetical':
+                        return (a.dataset.title || '').localeCompare(b.dataset.title || '');
+                    case 'newest':
+                    default:
+                        return new Date(b.dataset.created) - new Date(a.dataset.created);
+                }
+            });
+
+            cursosGrid.innerHTML = '';
+
+            if (filteredCards.length > 0) {
+                filteredCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    cursosGrid.appendChild(card);
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 50);
+                });
+            } else {
+                cursosGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhum curso encontrado</h3>
+                        <p>Tente ajustar os filtros de busca ou explore outras categorias.</p>
+                    </div>
+                `;
+            }
+
+            resultsCount.textContent = filteredCards.length;
+            hideLoading();
+        }, 300);
+    }
+
+    searchInput.addEventListener('input', debounce(filterAndSort, 300));
+    categorySelect.addEventListener('change', filterAndSort);
+    levelSelect.addEventListener('change', filterAndSort);
+    sortSelect.addEventListener('change', filterAndSort);
+
+    viewButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            viewButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const view = btn.dataset.view;
+            if (view === 'list') {
+                cursosGrid.style.gridTemplateColumns = '1fr';
+                cursosGrid.querySelectorAll('.course-card').forEach(card => {
+                    card.style.flexDirection = 'row';
+                    card.style.height = 'auto';
+                    const img = card.querySelector('.course-image');
+                    if (img) img.style.width = '200px';
+                });
+            } else {
+                cursosGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(350px, 1fr))';
+                cursosGrid.querySelectorAll('.course-card').forEach(card => {
+                    card.style.flexDirection = 'column';
+                    card.style.height = 'auto';
+                    const img = card.querySelector('.course-image');
+                    if (img) img.style.width = '100%';
+                });
+            }
+        });
+    });
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    const courseCards = document.querySelectorAll('.course-card');
+    courseCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    });
+
+    courseCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s ease';
+        observer.observe(card);
+    });
+
+    const coursesTitles = allCards.map(card => 
+        card.querySelector('.course-title')?.textContent || ''
+    ).filter(Boolean);
+
+    searchInput.addEventListener('focus', function() {
+        this.setAttribute('list', 'course-suggestions');
+        
+        if (!document.getElementById('course-suggestions')) {
+            const datalist = document.createElement('datalist');
+            datalist.id = 'course-suggestions';
+            coursesTitles.forEach(title => {
+                const option = document.createElement('option');
+                option.value = title;
+                datalist.appendChild(option);
+            });
+            document.body.appendChild(datalist);
         }
-    `;
-    document.head.appendChild(style);
+    });
+
+    function highlightSearchTerm(text, term) {
+        if (!term) return text;
+        const regex = new RegExp(`(${term})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    }
+
+    searchInput.addEventListener('input', function() {
+        const term = this.value.trim();
+        setTimeout(() => {
+            cursosGrid.querySelectorAll('.course-title').forEach(title => {
+                const originalText = title.getAttribute('data-original') || title.textContent;
+                if (!title.getAttribute('data-original')) {
+                    title.setAttribute('data-original', originalText);
+                }
+                title.innerHTML = highlightSearchTerm(originalText, term);
+            });
+        }, 350);
+    });
+});
+
+// Adicionar estilos dinâmicos para o highlight
+const style = document.createElement('style');
+style.textContent = `
+    mark {
+        background: linear-gradient(135deg, #fef3c7, #fbbf24);
+        color: #92400e;
+        padding: 0.125rem 0.25rem;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+    
+    .course-card:hover mark {
+        background: linear-gradient(135deg, #ddd6fe, #8b5cf6);
+        color: white;
+    }
+    
+    .course-button.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #6b7280;
+        pointer-events: none;
+    }
+    
+    .course-button.disabled:hover {
+        background: #6b7280;
+        transform: none;
+    }
+`;
+document.head.appendChild(style);
 </script>
 
 <?php
-// Incluir footer
 include_once '../arquivosReuso/footer.php';
 ?>

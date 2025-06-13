@@ -27,7 +27,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    header('Location: listagemCursos.php');
+    header('Location: ../../listaCursos/listagemCursos.php');
     exit();
 }
 
@@ -70,232 +70,11 @@ function gerarPreco($duration, $level) {
 
 $preco = gerarPreco($curso['duration'], $curso['level']);
 
-include_once '../arquivosReuso/header.php';
+include_once '../../arquivosReuso/header.php';
 ?>
 
-<style>
-    .payment-container {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
+<link rel="stylesheet" href="pagamento-curso.css">
 
-    .payment-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .payment-title {
-        color: #1f2937;
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-    }
-
-    .payment-subtitle {
-        color: #6b7280;
-        font-size: 1.1rem;
-    }
-
-    .course-info {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 2rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-    }
-
-    .course-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-    }
-
-    .course-details {
-        display: flex;
-        gap: 2rem;
-        margin-top: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .course-detail {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .price-section {
-        background: #f8fafc;
-        padding: 2rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-
-    .price-label {
-        color: #6b7280;
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .price-value {
-        color: #059669;
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-    }
-
-    .price-installments {
-        color: #6b7280;
-        font-size: 0.9rem;
-    }
-
-    .payment-methods {
-        margin-bottom: 2rem;
-    }
-
-    .methods-title {
-        color: #1f2937;
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
-
-    .methods-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-    }
-
-    .method-card {
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 1rem;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .method-card:hover,
-    .method-card.selected {
-        border-color: #3b82f6;
-        background: #eff6ff;
-    }
-
-    .method-icon {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-
-    .method-name {
-        font-weight: 600;
-        color: #1f2937;
-    }
-
-    .payment-form {
-        background: #f8fafc;
-        padding: 2rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-label {
-        display: block;
-        color: #374151;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-
-    .form-input {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-    }
-
-    .form-input:focus {
-        outline: none;
-        border-color: #3b82f6;
-    }
-
-    .form-row {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 1rem;
-    }
-
-    .payment-button {
-        width: 100%;
-        background: linear-gradient(135deg, #059669, #10b981);
-        color: white;
-        padding: 1rem 2rem;
-        border: none;
-        border-radius: 12px;
-        font-size: 1.1rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-bottom: 1rem;
-    }
-
-    .payment-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
-    }
-
-    .security-info {
-        background: #ecfdf5;
-        border: 1px solid #a7f3d0;
-        border-radius: 8px;
-        padding: 1rem;
-        text-align: center;
-        color: #047857;
-    }
-
-    .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #6b7280;
-        text-decoration: none;
-        margin-bottom: 2rem;
-        transition: color 0.3s ease;
-    }
-
-    .back-link:hover {
-        color: #3b82f6;
-    }
-
-    @media (max-width: 768px) {
-        .payment-container {
-            margin: 1rem;
-            padding: 1rem;
-        }
-        
-        .course-details {
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .form-row {
-            grid-template-columns: 1fr;
-        }
-        
-        .price-value {
-            font-size: 2.5rem;
-        }
-    }
-</style>
 
 <div class="payment-container">
     <a href="listagemCursos.php" class="back-link">
@@ -324,10 +103,6 @@ include_once '../arquivosReuso/header.php';
                 <span><strong>Duração:</strong> <?php echo htmlspecialchars($curso['duration'] ?? '40h'); ?></span>
             </div>
             <div class="course-detail">
-                <i class="fas fa-layer-group"></i>
-                <span><strong>Nível:</strong> <?php echo htmlspecialchars($curso['level'] ?? 'Intermediário'); ?></span>
-            </div>
-            <div class="course-detail">
                 <i class="fas fa-star"></i>
                 <span><strong>Avaliação:</strong> <?php echo htmlspecialchars($curso['rating'] ?? '4.5'); ?> ⭐</span>
             </div>
@@ -346,10 +121,6 @@ include_once '../arquivosReuso/header.php';
             <div class="method-card selected" data-method="credit">
                 <i class="fas fa-credit-card method-icon"></i>
                 <div class="method-name">Cartão de Crédito</div>
-            </div>
-            <div class="method-card" data-method="debit">
-                <i class="fas fa-money-check method-icon"></i>
-                <div class="method-name">Cartão de Débito</div>
             </div>
             <div class="method-card" data-method="pix">
                 <i class="fas fa-qrcode method-icon"></i>

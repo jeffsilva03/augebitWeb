@@ -2,7 +2,7 @@
 include '../arquivosReuso/conexao.php';
 session_start();
 
-// Verificar se o ID do curso foi fornecido
+
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header('Location: painel_instrutor.php');
     exit();
@@ -14,14 +14,13 @@ $sucesso = false;
 $deleted = false;
 $errors = [];
 
-// Verifica sessão
+
 if (!$instrutor_id) {
     $errors[] = "Instrutor não autenticado.";
 }
 
-// Processar ação de deletar
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
-    // Verificar se o curso pertence ao instrutor
     $sql = "SELECT id FROM cursos WHERE id = ? AND instrutor_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $curso_id, $instrutor_id);
@@ -46,9 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-// Processar formulário de edição quando enviado
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (!isset($_POST['action']) || $_POST['action'] !== 'delete')) {
-    // Captura e valida campos (mesmos campos do criar_curso.php)
     $titulo    = trim($_POST['titulo']    ?? '');
     $descricao = trim($_POST['descricao'] ?? '');
     $category  = trim($_POST['category']  ?? '');
@@ -60,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (!isset($_POST['action']) || $_POST
     $grad2     = trim($_POST['grad2']     ?? '');
     $icon      = trim($_POST['icon']      ?? '');
 
-    // Validações (mesmas do criar_curso.php)
+   
     if (mb_strlen($titulo) < 3)     $errors[] = "Título muito curto (mínimo 3 caracteres).";
     if (mb_strlen($descricao) < 20) $errors[] = "Descrição muito curta (mínimo 20 caracteres).";
     if ($rating === null || $rating < 0 || $rating > 5) $errors[] = "Avaliação inválida.";
@@ -111,9 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (!isset($_POST['action']) || $_POST
     }
 }
 
-// Se o curso foi deletado, não precisa buscar os dados
+
 if (!$deleted) {
-    // Buscar dados do curso
+    // Buscar dados do curs
     $sql = "SELECT * FROM cursos WHERE id = ? AND instrutor_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $curso_id, $instrutor_id);
@@ -372,7 +370,7 @@ if (!$deleted) {
   </div>
   <?php endif; ?>
 
-  <!-- Container para notificações flutuantes -->
+
   <div class="notifications-container" id="notifications"></div>
 
   <!-- Modal de confirmação para deletar -->
@@ -783,7 +781,6 @@ if (!$deleted) {
   </main>
 
   <script>
-    // Character counters
     const titleInput = document.getElementById('titulo');
     const titleCounter = document.getElementById('titleCounter');
     const descInput = document.getElementById('descricao');
@@ -804,11 +801,11 @@ if (!$deleted) {
     titleInput.addEventListener('input', updateTitleCounter);
     descInput.addEventListener('input', updateDescCounter);
     
-    // Initialize counters
+   
     updateTitleCounter();
     updateDescCounter();
 
-    // Rating range slider
+   
     const ratingSlider = document.getElementById('rating');
     const ratingValue = document.getElementById('ratingValue');
 
@@ -816,7 +813,7 @@ if (!$deleted) {
       ratingValue.textContent = parseFloat(this.value).toFixed(1);
     });
 
-    // Color gradient picker
+   
     const color1 = document.getElementById('color1');
     const color2 = document.getElementById('color2');
     const gradientPreview = document.getElementById('gradientPreview');
@@ -830,31 +827,29 @@ if (!$deleted) {
 
     color1.addEventListener('change', updateGradient);
     color2.addEventListener('change', updateGradient);
-    updateGradient(); // Initialize
+    updateGradient(); 
 
-    // Icon selector
+   
     const iconOptions = document.querySelectorAll('.icon-option');
     const iconInput = document.getElementById('icon');
 
     iconOptions.forEach(option => {
-      // Check if this icon should be selected based on PHP value
       if (option.dataset.icon === iconInput.value) {
         option.classList.add('selected');
       }
       
       option.addEventListener('click', function() {
-        // Remove selected class from all options
         iconOptions.forEach(opt => opt.classList.remove('selected'));
         
-        // Add selected class to clicked option
+      
         this.classList.add('selected');
         
-        // Set the value
+       
         iconInput.value = this.dataset.icon;
       });
     });
 
-    // Modal functions
+   
     function openDeleteModal() {
       document.getElementById('deleteModal').classList.add('show');
       document.body.style.overflow = 'hidden';
@@ -869,21 +864,21 @@ if (!$deleted) {
       document.getElementById('deleteForm').submit();
     }
 
-    // Close modal on overlay click
+   
     document.getElementById('deleteModal').addEventListener('click', function(e) {
       if (e.target === this) {
         closeDeleteModal();
       }
     });
 
-    // Close modal on ESC key
+    
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeDeleteModal();
       }
     });
 
-    // Add smooth animations on scroll
+   
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -897,7 +892,7 @@ if (!$deleted) {
       observer.observe(card);
     });
 
-    // Sistema de notificações aprimorado
+   
     function showNotification(type, title, description) {
       const notifications = {
         success: {
@@ -934,7 +929,7 @@ if (!$deleted) {
       
       container.appendChild(notificationEl);
       
-      // Auto remove após 5 segundos
+   
       setTimeout(() => {
         if (notificationEl.parentElement) {
           removeNotification(notificationEl.querySelector('.status-close'));
@@ -952,7 +947,7 @@ if (!$deleted) {
       }, 400);
     }
 
-    // Função para mostrar sucesso após atualização do curso
+
     function showSuccessUpdate() {
       showNotification(
         'success', 
@@ -961,7 +956,7 @@ if (!$deleted) {
       );
     }
 
-    // Verifica se o curso foi atualizado com sucesso
+   
     <?php if (isset($sucesso) && $sucesso): ?>
     showSuccessUpdate();
     <?php endif; ?>

@@ -1,10 +1,11 @@
 <?php
+// processar-pagamento.php - Versão corrigida
 session_start();
-require_once '../../arquivosReuso/conexao.php';
+require_once '../../arquivosReuso/conexao.php'; // Ajustar caminho conforme sua estrutura
 
 // Verificar se usuário está logado e é usuarioGeral
 if (!isset($_SESSION['usuario_id']) || $_SESSION['perfil'] !== 'usuarioGeral') {
-    header('Location: ../login/form_login.php');
+    header('Location: ../../registro/form_login.php');
     exit();
 }
 
@@ -20,7 +21,7 @@ $valor = (float)$_POST['valor'];
 
 // Verificar se o usuário da sessão é o mesmo do formulário
 if ($usuario_id !== $_SESSION['usuario_id']) {
-    header('Location: listagemCursos.php');
+    header('Location: ../../listaCursos/listagemCursos.php');
     exit();
 }
 
@@ -32,7 +33,7 @@ $stmt_curso->execute();
 $result_curso = $stmt_curso->get_result();
 
 if ($result_curso->num_rows === 0) {
-    header('Location: listagemCursos.php');
+    header('Location: ../../listaCursos/listagemCursos.php');
     exit();
 }
 
@@ -47,7 +48,7 @@ $result_check = $stmt_check->get_result();
 
 if ($result_check->num_rows > 0) {
     // Usuário já está inscrito, redirecionar para o curso
-    header('Location: curso-detalhes.php?id=' . $curso_id);
+    header('Location: ../../listaCursos/curso.php?id=' . $curso_id);
     exit();
 }
 
@@ -55,16 +56,17 @@ if ($result_check->num_rows > 0) {
 sleep(2); // Simular delay do processamento
 
 // Inserir inscrição na base de dados
-$sql_inscricao = "INSERT INTO inscricoes (usuario_id, curso_id) VALUES (?, ?)";
+$sql_inscricao = "INSERT INTO inscricoes (usuario_id, curso_id, inscrito_em) VALUES (?, ?, NOW())";
 $stmt_inscricao = $conn->prepare($sql_inscricao);
 $stmt_inscricao->bind_param('ii', $usuario_id, $curso_id);
 
 if ($stmt_inscricao->execute()) {
     // Pagamento processado com sucesso
     $_SESSION['pagamento_sucesso'] = [
-        'curso_titulo' => $curso['titulo'],
+        'curso_nome' => $curso['titulo'],
         'curso_id' => $curso_id,
-        'valor' => $valor
+        'valor' => $valor,
+        'data_pagamento' => date('Y-m-d H:i:s')
     ];
     header('Location: pagamento-sucesso.php');
 } else {

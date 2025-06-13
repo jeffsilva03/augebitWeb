@@ -1,11 +1,11 @@
-/* reset básico */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Tipografia e corpo */
+
 html, body {
   height: 100%;
   font-family: 'Roboto', sans-serif;
@@ -14,7 +14,7 @@ body {
   margin: 0;
 }
 
-/* Keyframes */
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -24,7 +24,7 @@ body {
   50%     { transform: scale(1.05); }
 }
 
-/* Split screen */
+
 .split {
   position: fixed;
   width: 100%;
@@ -68,7 +68,7 @@ body {
   letter-spacing: 1px;
 }
 
-/* Caixa de formulário */
+
 .login-box {
   background: #fff;
   padding: 40px;
@@ -127,12 +127,12 @@ body {
 .login-box button:active {
   animation: pulse 0.4s ease-in-out;
 }
-/* Mensagens */
+
 .login-box .error { color: #D8000C; margin-top:12px; text-align:center; font-size:0.85rem; }
 .login-box .success { color: #007700; margin-top:12px; text-align:center; font-size:0.85rem; }
 .aux-link { text-align: center; margin-top: 12px; }
 
-/* Responsividade */
+
 @media (max-width: 900px) {
   .split { width: 100%; }
   .left  { display: none; }

@@ -1,11 +1,10 @@
-/* reset básico */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Tipografia e corpo */
+
 html, body {
   height: 100%;
   font-family: 'Roboto', sans-serif;
@@ -14,9 +13,7 @@ body {
   margin: 0;
 }
 
-/* ============================================
-   Keyframes para animações
-   ============================================ */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -33,9 +30,7 @@ body {
   50%      { transform: scale(1.05); }
 }
 
-/* ============================================
-   Split screen
-   ============================================ */
+
 .split {
   position: fixed;
   width: 100%;
@@ -49,13 +44,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* fundo full-screen */
   background: url('src/fundo.png') no-repeat center center fixed;
   background-size: cover;
 }
 
-/* overlay escuro */
 .left::before {
   content: '';
   position: absolute;
@@ -64,7 +56,7 @@ body {
   background: rgba(0,0,0,0.6);
 }
 
-/* logo acima da overlay */
+
 .logo-container {
   position: relative;
   display: flex;
@@ -88,9 +80,7 @@ body {
   align-items: center;
 }
 
-/* ============================================
-   Login Box
-   ============================================ */
+
 .login-box {
   background-color: #FFFFFF;
   padding: 40px;
@@ -100,7 +90,7 @@ body {
   height: 420px;
   margin-left:700px;
 
-  /* animação de entrada */
+
   opacity: 0;
   animation: fadeInUp 0.6s ease-out 0.2s forwards;
 }
@@ -120,9 +110,7 @@ body {
   color: #555555;
 }
 
-/* ============================================
-   Inputs
-   ============================================ */
+
 .login-box input {
   width: 100%;
   padding: 12px 14px;
@@ -141,9 +129,7 @@ body {
   outline: none;
 }
 
-/* ============================================
-   Botão
-   ============================================ */
+
 .login-box button {
   width: 100%;
   padding: 14px;
@@ -165,9 +151,7 @@ body {
   animation: pulse 0.4s ease-in-out;
 }
 
-/* ============================================
-   Mensagem de erro
-   ============================================ */
+
 .login-box .error {
   margin-top: 12px;
   color: #D8000C;
@@ -175,9 +159,7 @@ body {
   text-align: center;
 }
 
-/* ============================================
-   Responsividade
-   ============================================ */
+
 @media (max-width: 900px) {
   .split { width: 100%; }
   .left  { display: none; }

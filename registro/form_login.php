@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Login – AUGEBIT</title>
+  
+  <link rel="icon" href="src/icone.ico" type="image/x-icon">
   <link rel="stylesheet" href="login.css">
 </head>
 <body>

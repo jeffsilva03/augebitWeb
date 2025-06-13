@@ -8,7 +8,7 @@ if (isset($_POST['nome'], $_POST['email'], $_POST['senha'], $_POST['perfil'])) {
     $senha  = $_POST['senha'];
     $perfil = $_POST['perfil'];
 
-    // Validações
+    
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['erro'] = 'E-mail inválido.';
     } elseif (strlen($senha) < 6) {
@@ -25,7 +25,7 @@ if (isset($_POST['nome'], $_POST['email'], $_POST['senha'], $_POST['perfil'])) {
         if ($stmt->execute()) {
             $_SESSION['mensagem'] = 'Cadastro realizado com sucesso!';
 
-            // Se o cadastro foi de um usuário comum (gratuito ou pagante), sempre manda ao login
+            // Se o cadastro foi de um usuário comum,, sempre manda ao login
             if ($perfil === 'usuario' || $perfil === 'usuarioGeral') {
                 header('Location: form_login.php');
                 exit();
@@ -37,7 +37,7 @@ if (isset($_POST['nome'], $_POST['email'], $_POST['senha'], $_POST['perfil'])) {
                 exit();
             }
 
-            // Fallback geral
+         
             header('Location: form_login.php');
             exit();
         } else {
@@ -48,6 +48,6 @@ if (isset($_POST['nome'], $_POST['email'], $_POST['senha'], $_POST['perfil'])) {
     $_SESSION['erro'] = 'Preencha todos os campos.';
 }
 
-// Em caso de erro, volta ao formulário público
+// Em caso de erro, volta ao formulário
 header('Location: form_cadastro.php');
 exit();

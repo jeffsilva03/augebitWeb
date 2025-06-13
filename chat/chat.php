@@ -1,8 +1,8 @@
 <?php
-// chat.php - componente de chat aprimorado
 ?>
 
 <style>
+  
   :root {
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -26,7 +26,7 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
-  /* Botão de toggle com design glassmorphism */
+
   #chat-toggle {
     position: fixed;
     bottom: 2rem;
@@ -64,7 +64,7 @@
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   }
 
-  /* Container principal com glassmorphism aprimorado */
+  
   .chat-container {
     position: fixed;
     bottom: 7rem;
@@ -94,7 +94,7 @@
     opacity: 1;
   }
 
-  /* Cabeçalho com gradiente animado */
+ 
   .chat-header {
     display: flex;
     align-items: center;
@@ -143,7 +143,7 @@
     font-weight: 400;
   }
 
-  /* Área de mensagens com scroll customizado */
+  
   .messages {
     flex: 1;
     padding: 1.5rem;
@@ -171,7 +171,7 @@
     background: linear-gradient(135deg, #9333EA 0%, #8B5CF6 100%);
   }
 
-  /* Bolhas de mensagem aprimoradas */
+ 
   .message {
     max-width: 80%;
     padding: 1.25rem 1.5rem;
@@ -242,7 +242,7 @@
     font-weight: 400;
   }
 
-  /* Indicador de digitação modernizado */
+ 
   .typing {
     display: flex;
     align-items: center;
@@ -292,7 +292,7 @@
     }
   }
 
-  /* Botões de opção com hover effects aprimorados */
+  
   .options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -344,7 +344,7 @@
     transform: translateY(-1px) scale(0.98);
   }
 
-  /* Responsividade aprimorada */
+
   @media (max-width: 480px) {
     #chat-toggle {
       bottom: 1.5rem;
@@ -376,8 +376,8 @@
     }
   }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<!-- HTML do chat -->
 <div id="chat-toggle">
   <i class="fas fa-robot"></i>
   <span>Assistente Virtual</span>
@@ -414,7 +414,7 @@
       next: ["Área de Atuação", "Serviços", "Contato", "Voltar ao Menu"]
     },
     "Contato": {
-      reply: "Entre em contato conosco:\n\n📧 Email: contato@augebit.com\n📱 WhatsApp: (11) 99999-9999\n🌐 Site: www.augebit.com\n\Estamos prontos para ajudá-lo!",
+      reply: "Entre em contato conosco:\n\n📧 Email: contato@augebit.com\n📱 WhatsApp: (11) 99999-9999\n🌐 Site: www.augebit.com\n\nEstamos prontos para ajudá-lo!",
       next: ["Área de Atuação", "Serviços", "Quem Somos", "Voltar ao Menu"]
     },
     "Voltar ao Menu": {
@@ -430,12 +430,12 @@
   const messagesContainer = document.getElementById('messages');
   const optionsContainer = document.getElementById('options');
 
-  // Toggle do chat
+  // Event listener para abrir/fechar o chat
   toggleBtn.addEventListener('click', () => {
     chatBox.classList.toggle('open');
   });
 
-  // Função para mostrar indicador de digitação
+  // Função para mostrar o indicador de digitação  
   function showTyping(callback) {
     const typingElement = document.createElement('div');
     typingElement.className = 'typing';
@@ -464,7 +464,7 @@
     }, 1200);
   }
 
-  // Função para adicionar mensagem
+  // Função para adicionar mensagens ao chat
   function appendMessage(text, sender) {
     const messageElement = document.createElement('div');
     messageElement.className = `message ${sender}`;
@@ -500,7 +500,7 @@
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
 
-  // Função para atualizar opções
+  // Função para atualizar as opções de botões
   function updateOptions(optionsList) {
     optionsContainer.innerHTML = '';
     
@@ -512,7 +512,7 @@
     });
   }
 
-  // Função para lidar com escolha do usuário
+  // Função para lidar com as escolhas do usuário
   function handleUserChoice(choice) {
     appendMessage(choice, 'user');
     
@@ -527,10 +527,10 @@
     }
   }
 
-  // Inicialização
+  // Inicializar as opções
   updateOptions(currentOptions);
   
-  // Mensagem de boas-vindas automática após um pequeno delay
+  // Iniciar conversa automaticamente após um pequeno delay
   setTimeout(() => {
     handleUserChoice('Começar');
   }, 800);

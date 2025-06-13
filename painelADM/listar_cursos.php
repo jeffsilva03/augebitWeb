@@ -1,5 +1,4 @@
 <?php
-// adm/listar_cursos.php
 session_start();
 require '../conexaoBD/conexao.php';
 if (!isset($_SESSION['perfil']) || $_SESSION['perfil']!=='adm') {
@@ -46,6 +45,8 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Cursos e Inscritos • ADM</title>
+  
+  <link rel="icon" href="src/icone.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
   <style>
     :root {
@@ -67,7 +68,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       --anim-duration: 0.3s;
     }
 
-    /* Layout principal */
+    
     .container {
       width: 100%;
       max-width: 1200px;
@@ -75,7 +76,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       padding: 2rem 1rem;
     }
 
-    /* Grid para os cursos */
+   
     .cursos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -83,7 +84,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       margin-top: 1.5rem;
     }
 
-    /* Card styles */
+   
     .card {
       background: var(--white);
       border-radius: var(--radius);
@@ -136,7 +137,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       line-height: 1.5;
     }
 
-    /* Badge para contagem */
+
     .badge {
       display: inline-flex;
       align-items: center;
@@ -152,7 +153,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       color: var(--primary-dark);
     }
 
-    /* Lista de inscritos */
+    
     .inscritos-lista {
       margin-top: 2rem;
     }
@@ -226,7 +227,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       color: var(--primary-dark);
     }
 
-    /* Cabeçalho da página */
+    /* HEADER */
     .page-header {
       display: flex;
       justify-content: space-between;
@@ -245,7 +246,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       gap: 0.5rem;
     }
 
-    /* Botões */
+   
     .btn {
       background: var(--primary);
       color: var(--white);
@@ -284,7 +285,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       background: var(--primary-bg);
     }
 
-    /* Status de inscrição vazia */
+  
     .status-vazio {
       padding: 2rem;
       text-align: center;
@@ -310,7 +311,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       margin-bottom: 1.5rem;
     }
 
-    /* Animação */
+    
     .animar-fadein {
       animation: fadeIn 0.5s ease-in-out;
     }
@@ -320,7 +321,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       to { opacity: 1; }
     }
 
-    /* Responsividade */
+  
     @media (max-width: 768px) {
       .cursos-grid {
         grid-template-columns: 1fr;
@@ -358,7 +359,6 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
     <?php endif;?>
 
     <?php if($curso_selecionado): ?>
-      <!-- Visualização de inscritos em um curso específico -->
       <div class="page-header">
         <a href="listar_cursos.php" class="voltar-link">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -438,7 +438,6 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       </div>
 
     <?php else: ?>
-      <!-- Listagem de todos os cursos -->
       <div class="page-header">
         <h1 class="page-title">
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -453,7 +452,6 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
       <div class="cursos-grid">
         <?php if($cursos->num_rows > 0): ?>
           <?php while($curso = $cursos->fetch_assoc()): 
-            // Contar inscritos para este curso
             $stmt_count = $conexao->prepare("SELECT COUNT(*) as total FROM inscricoes WHERE curso_id = ?");
             $stmt_count->bind_param('i', $curso['id']);
             $stmt_count->execute();
@@ -499,7 +497,6 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Inicializar os ícones Lucide, se disponíveis
       if (typeof lucide !== 'undefined') {
         lucide.createIcons();
       }

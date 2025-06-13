@@ -1,19 +1,17 @@
 <?php
-// adm/inscrever_curso.php
 session_start();
 require '../conexaoBD/conexao.php';
 if (!isset($_SESSION['perfil']) || $_SESSION['perfil']!=='adm') {
-  header('Location: ../form_login.php'); exit;
+  header('Location: ../registro/form_login.php'); exit;
 }
 
-// Processa inscrição...
+// Processa inscrição
 if ($_SERVER['REQUEST_METHOD']==='POST') {
-  // Verifica se é uma submissão de confirmação
   if (isset($_POST['confirmar']) && $_POST['confirmar'] === 'true') {
     $usuario_id = intval($_POST['usuario_id']);
     $curso_id = intval($_POST['curso_id']);
     
-    // Verificar se já existe esta inscrição para evitar duplicatas
+    // Verificar se já existe esta inscrição para evitar duplicae
     $verificar = $conexao->prepare("SELECT id FROM inscricoes WHERE usuario_id = ? AND curso_id = ?");
     $verificar->bind_param('ii', $usuario_id, $curso_id);
     $verificar->execute();
@@ -22,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     if ($verificar->num_rows > 0) {
       $_SESSION['erro'] = "Este usuário já está inscrito neste curso.";
     } else {
-      // Inserir a inscrição
       $stmt = $conexao->prepare("INSERT INTO inscricoes (usuario_id, curso_id) VALUES (?, ?)");
       $stmt->bind_param('ii', $usuario_id, $curso_id);
       $resultado = $stmt->execute();
@@ -34,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
       }
     }
     
-    // Permanece na mesma página em vez de redirecionar
+  
     $mostrar_resultado = true;
   }
 }
@@ -43,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 $usuarios = $conexao->query("SELECT id, nome FROM cadastro ORDER BY nome");
 $cursos = $conexao->query("SELECT id, titulo FROM cursos ORDER BY titulo");
 
-// Para preencher novamente o formulário após envio
+
 $usuario_selecionado = isset($_POST['usuario_id']) ? intval($_POST['usuario_id']) : '';
 $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : '';
 ?>
@@ -53,6 +50,8 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Inscrever em Curso • ADM</title>
+  
+  <link rel="icon" href="src/icone.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
   <style>
     :root {
@@ -74,7 +73,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       --anim-duration: 0.3s;
     }
 
-    /* Card base styles */
+    
     .card {
       background: var(--white);
       border-radius: var(--radius);
@@ -158,7 +157,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       pointer-events: none;
     }
 
-    /* Buttons */
+  
     .btn {
       background: var(--primary);
       color: var(--white);
@@ -198,7 +197,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       padding: 1.25rem 2rem;
     }
 
-    /* Ripple effect */
+   
     .btn-ripple {
       position: relative;
       overflow: hidden;
@@ -226,7 +225,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       transition: 0s;
     }
     
-    /* Modal styling */
+  
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -286,7 +285,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       justify-content: flex-end;
     }
     
-    /* Alert and notification styling */
+  
     .alerta {
       padding: 1rem;
       border-radius: var(--radius);
@@ -320,7 +319,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       color: var(--error);
     }
 
-    /* Results card styling */
+  
     .resultado-card {
       padding: 2rem;
       border-radius: var(--radius);
@@ -355,7 +354,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       margin-top: 1.5rem;
     }
 
-    /* Container layout */
+   
     .container {
       width: 100%;
       max-width: 800px;
@@ -373,7 +372,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       to { opacity: 1; }
     }
 
-    /* Responsive adjustments */
+    
     @media (max-width: 768px) {
       .form-card {
         padding: 1.5rem;
@@ -505,7 +504,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Configurar o modal e funcionalidades
+      // config do modal
       const btnInscrever = document.getElementById('btn-inscrever');
       const modalConfirmacao = document.getElementById('modal-confirmacao');
       const btnCancelar = document.getElementById('btn-cancelar');
@@ -538,7 +537,6 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       });
       
       btnConfirmar.addEventListener('click', function() {
-        // Definir o campo de confirmação como true
         campoConfirmar.value = 'true';
         
         // Enviar o formulário
@@ -552,7 +550,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
         }
       });
 
-      // Inicializar os ícones Lucide caso estejam presentes
+      // Inicializar os ícones Lucide
       if (typeof lucide !== 'undefined') {
         lucide.createIcons();
       }

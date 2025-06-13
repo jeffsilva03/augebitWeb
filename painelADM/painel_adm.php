@@ -1,11 +1,12 @@
 <?php
 session_start();
+date_default_timezone_set('America/Sao_Paulo');
 require '../conexaoBD/conexao.php';
 if (!isset($_SESSION['perfil']) || $_SESSION['perfil'] !== 'adm') {
   header('Location: ../registro/form_login.php'); exit;
 }
 
-// Contadores
+
 $totalUsuarios      = $conexao->query("SELECT COUNT(*) FROM cadastro")->fetch_row()[0];
 $usuariosComuns     = $conexao->query("SELECT COUNT(*) FROM cadastro WHERE perfil='usuario'")->fetch_row()[0];
 $instrutores        = $conexao->query("SELECT COUNT(*) FROM cadastro WHERE perfil='instrutor'")->fetch_row()[0];
@@ -13,7 +14,6 @@ $administradores    = $conexao->query("SELECT COUNT(*) FROM cadastro WHERE perfi
 $totalCursos        = $conexao->query("SELECT COUNT(*) FROM cursos")->fetch_row()[0];
 $totalInscricoes    = $conexao->query("SELECT COUNT(*) FROM inscricoes")->fetch_row()[0];
 
-// Dados para gráficos
 $perfilsData = [
   'Usuários'      => $usuariosComuns,
   'Instrutores'   => $instrutores,
@@ -24,17 +24,17 @@ $cursoData = [
   'Inscrições'    => $totalInscricoes,
 ];
 
-// Tendências de crescimento (simulado - você pode substituir por dados reais)
+
 $crescimentoMensal = [
   'Jan' => 15, 'Fev' => 21, 'Mar' => 28, 'Abr' => 35, 
   'Mai' => 42, 'Jun' => 55, 'Jul' => 68, 'Ago' => 82, 
   'Set' => 96, 'Out' => 110, 'Nov' => 125, 'Dez' => $totalInscricoes
 ];
 
-// Cálculo de taxas para KPIs
-$taxaConclusao = 78; // Simulado - substituir por cálculo real
-$taxaEngajamento = 85; // Simulado - substituir por cálculo real
-$cursosAtivos = intval($totalCursos * 0.75); // Simulado
+
+$taxaConclusao = 78;
+$taxaEngajamento = 85; 
+$cursosAtivos = intval($totalCursos * 0.75); 
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -42,15 +42,14 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Painel de ADM</title>
+  <link rel="icon" href="src/icone.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-  <!-- Google Fonts -->
+  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Chart.js -->
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- ApexCharts para gráficos avançados -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="pagina-painel theme-light" id="app">
@@ -118,7 +117,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
           <p class="kpi-label">Cursos ativos</p>
           <div class="kpi-trend positive">
             <i data-lucide="trending-up" class="trend-icon"></i>
-            <span>+3</span>
+            <span>+1</span>
           </div>
         </div>
       </div>
@@ -132,7 +131,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
           <p class="kpi-label">Total usuários</p>
           <div class="kpi-trend positive">
             <i data-lucide="trending-up" class="trend-icon"></i>
-            <span>+12</span>
+            <span>+5</span>
           </div>
         </div>
       </div>
@@ -197,7 +196,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
           <p>Cursos Disponíveis</p>
         </div>
         <div class="card-footer">
-          <span class="badge badge-light">+3 este mês</span>
+          <span class="badge badge-light">+1 este mês</span>
         </div>
       </div>
       <div class="card-dashboard bg-vermelho-gradient">
@@ -212,7 +211,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
           <p>Inscrições</p>
         </div>
         <div class="card-footer">
-          <span class="badge badge-light">+15 este mês</span>
+          <span class="badge badge-light">+3 este mês</span>
         </div>
       </div>
     </div>
@@ -229,11 +228,10 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
   </main>
 
   <script>
-    // Ativa Lucide
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       
-      // Inicializar contadores com animação
+  
       const counters = document.querySelectorAll('.counter');
       counters.forEach(counter => {
         const target = parseInt(counter.getAttribute('data-target'));
@@ -254,7 +252,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
         updateCounter();
       });
       
-      // Toggle tema claro/escuro
+
       const themeToggle = document.getElementById('themeToggle');
       const app = document.getElementById('app');
       const themeIcon = themeToggle.querySelector('.icon-theme');
@@ -271,7 +269,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
         lucide.createIcons();
       });
       
-      // Fechar banner
+    
       const infoBanner = document.querySelector('.info-banner');
       const closeBtn = document.querySelector('.btn-close-banner');
       
@@ -285,7 +283,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
       }
     });
 
-    // Dados para gráficos
+
     const perfisLabels = <?= json_encode(array_keys($perfilsData)) ?>;
     const perfisValues = <?= json_encode(array_values($perfilsData)) ?>;
     const cursoLabels = <?= json_encode(array_keys($cursoData)) ?>;
@@ -293,7 +291,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
     const crescimentoLabels = <?= json_encode(array_keys($crescimentoMensal)) ?>;
     const crescimentoValues = <?= json_encode(array_values($crescimentoMensal)) ?>;
 
-    // Pie chart de perfis (aprimorado)
+  
     new Chart(document.getElementById('perfilChart'), {
       type: 'doughnut',
       data: {
@@ -345,7 +343,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
       }
     });
 
-    // Bar chart de cursos vs inscrições (aprimorado)
+
     new Chart(document.getElementById('cursoChart'), {
       type: 'bar',
       data: {
@@ -412,7 +410,7 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
       }
     });
     
-    // ApexCharts - Gráfico de crescimento (novo)
+
     const options = {
       series: [{
         name: 'Inscrições',
@@ -497,16 +495,14 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
     const chart = new ApexCharts(document.getElementById("crescimentoChart"), options);
     chart.render();
     
-    // Alternância dos modos de visualização do gráfico
     document.querySelectorAll('.btn-toggle').forEach(button => {
       button.addEventListener('click', () => {
         document.querySelectorAll('.btn-toggle').forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
         
-        // Aqui você pode adicionar lógica para mudar os dados do gráfico
         const view = button.getAttribute('data-view');
         if (view === 'semanal') {
-          // Atualizar para dados semanais (simulado)
+
           chart.updateOptions({
             xaxis: {
               categories: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
@@ -517,7 +513,6 @@ $cursosAtivos = intval($totalCursos * 0.75); // Simulado
             data: [12, 15, 8, 10, 25, 18, 32]
           }]);
         } else {
-          // Voltar para dados mensais
           chart.updateOptions({
             xaxis: {
               categories: crescimentoLabels

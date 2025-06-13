@@ -5,7 +5,7 @@ include '../arquivosReuso/conexao.php';
 $page_title = 'Meus Cursos - Dashboard';
 
 // Incluir cabeçalho
-require_once '../arquivosReuso/header.php';
+require_once 'headerInstrutor.php';
 // Buscar estatísticas do banco
 $query_usuarios = "SELECT COUNT(*) as total FROM cadastro WHERE perfil IN ('usuario', 'usuarioGeral')";
 $result_usuarios = $conn->query($query_usuarios);
@@ -52,6 +52,8 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title><?= $page_title ?></title>
+    
+  <link rel="icon" href="src/icone.ico" type="image/x-icon">
      <link rel="icon" href="/../arquivosReuso/src/icone.ico" type="image/x-icon">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -85,9 +87,9 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
                     <i data-lucide="plus"></i>
                     Novo Curso
                 </a>
-                <a href="relatorios.php" class="btn btn-outline">
+                <a href="conteudoCursos/index.php" class="btn btn-outline">
                     <i data-lucide="bar-chart-3"></i>
-                    Relatórios
+                    Módulos
                 </a>
             </div>
         </header>
@@ -139,7 +141,7 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
                                 // Usar o resultado já obtido
                                 while($curso = $result_cursos_lista->fetch_assoc()): 
                                     // Contar módulos do curso
-                                    $mod_count = $conn->query("SELECT COUNT(*) as total FROM modulos WHERE curso_id = {$curso['id']}")->fetch_assoc()['total'];
+                                    $mod_count = $conn->query("SELECT COUNT(*) as total FROM atividades WHERE curso_id = {$curso['id']}")->fetch_assoc()['total'];
                                     
                                     // Contar alunos inscritos no curso
                                     $alunos_count = $conn->query("SELECT COUNT(*) as total FROM inscricoes WHERE curso_id = {$curso['id']}")->fetch_assoc()['total'];

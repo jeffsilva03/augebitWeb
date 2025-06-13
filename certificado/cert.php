@@ -1,19 +1,18 @@
 <?php
-// certificado/cert.php
 
-// 1) Inicia sessão (já lida no header, mas garantimos aqui)
+//  Inicia sessão 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 2) Verifica login usando a mesma chave de sessão do header
+//  Verifica login usando a mesma chave de sessão do header
 if (!isset($_SESSION['usuario_id'])) {
     header('Location: ../registro/form_login.php');
     exit;
 }
 $usuario_id = $_SESSION['usuario_id'];
 
-// 3) Conexão PDO
+// Conexão PDO
 try {
     $pdo = new PDO(
         "mysql:host=localhost;dbname=semestral_3b;charset=utf8",
@@ -24,12 +23,12 @@ try {
     die("Erro na conexão: " . $e->getMessage());
 }
 
-// 4) Recupera nome do aluno
+// Pega nome do aluno
 $stmt = $pdo->prepare("SELECT nome FROM cadastro WHERE id = ?");
 $stmt->execute([$usuario_id]);
 $nome_aluno = $stmt->fetchColumn();
 
-// 5) Recupera cursos inscritos
+// Pega cursos 
 $stmt = $pdo->prepare("
     SELECT c.id, c.titulo, c.duration
 FROM inscricoes i  
@@ -39,7 +38,7 @@ WHERE i.usuario_id = ?
 $stmt->execute([$usuario_id]);
 $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 6) Se não há inscrições, avisa e sai
+// Se não há inscrições, avisa e sai
 if (empty($cursos)) {
     ?><!DOCTYPE html>
     <html lang="pt-BR">
@@ -112,7 +111,7 @@ if (empty($cursos)) {
     exit;
 }
 
-// 7) Se não passou curso_id, mostra formulário de seleção
+// Se não passou curso_id, mostra formulário de seleção
 if (!isset($_GET['curso_id'])) {
     ?><!DOCTYPE html>
     <html lang="pt-BR">
@@ -120,6 +119,7 @@ if (!isset($_GET['curso_id'])) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>Selecionar Curso - AUGEBIT</title>
+        <link rel="icon" href="src/icone.ico" type="image/x-icon">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -376,7 +376,7 @@ if (!isset($_GET['curso_id'])) {
     exit;
 }
 
-// 8) Valida curso selecionado
+// Valida curso selecionado
 $curso_id = (int) $_GET['curso_id'];
 $curso_arr = array_filter($cursos, fn($c) => $c['id'] === $curso_id);
 if (empty($curso_arr)) {
@@ -384,17 +384,17 @@ if (empty($curso_arr)) {
 }
 $curso = array_shift($curso_arr);
 
-// 9) Prepara dados do certificado
+// Prepara dados do certificado
 $curso_titulo       = $curso['titulo'];
-// extrai só números da duração (ex: "20h" → "20")
+// extrai só números da duração
 $carga_horaria = preg_replace('/\D/', '', $curso['duration'] ?? '0');
 if (empty($carga_horaria)) {
-    $carga_horaria = '0'; // Fallback se não houver números na duration
+    $carga_horaria = '0'; 
 }
 $data_conclusao     = date('d/m/Y');
 $codigo_certificado = 'AUG-' . strtoupper(substr(md5($usuario_id . $curso_id), 0, 8));
 
-// 10) Exibe HTML do certificado
+//  HTML do certificado
 ?><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -402,357 +402,7 @@ $codigo_certificado = 'AUG-' . strtoupper(substr(md5($usuario_id . $curso_id), 0
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Certificado - AUGEBIT</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #ffffff;
-            color: #1a202c;
-            line-height: 1.6;
-        }
-
-        .certificate-page {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .page-intro {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .congratulations {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #1a202c;
-            margin-bottom: 0.5rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .intro-text {
-            font-size: 1.2rem;
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .certificate-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        .certificate-container {
-            background: #ffffff;
-            border: 3px solid #1a202c;
-            border-radius: 0;
-            padding: 4rem 3rem;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-        }
-
-        .certificate-border {
-            position: absolute;
-            top: 1.5rem;
-            left: 1.5rem;
-            right: 1.5rem;
-            bottom: 1.5rem;
-            border: 2px solid #5b67d1;
-            pointer-events: none;
-        }
-
-        .corner-ornaments {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 2px solid #7c3aed;
-        }
-
-        .corner-ornaments:nth-child(1) { top: 1rem; left: 1rem; border-right: none; border-bottom: none; }
-        .corner-ornaments:nth-child(2) { top: 1rem; right: 1rem; border-left: none; border-bottom: none; }
-        .corner-ornaments:nth-child(3) { bottom: 1rem; left: 1rem; border-right: none; border-top: none; }
-        .corner-ornaments:nth-child(4) { bottom: 1rem; right: 1rem; border-left: none; border-top: none; }
-
-        .institution-header {
-            margin-bottom: 2rem;
-        }
-
-        .logo-container {
-            margin-bottom: 1.5rem;
-        }
-
-        .logo-container img {
-            max-width: 200px;
-            height: auto;
-        }
-
-        .institution-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #374151;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 0.5rem;
-        }
-
-        .institution-tagline {
-            font-size: 0.9rem;
-            color: #6b7280;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .certificate-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #1a202c;
-            margin: 2.5rem 0;
-            font-family: 'Playfair Display', serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .certificate-body {
-            margin: 2.5rem 0;
-            font-size: 1.3rem;
-            line-height: 1.8;
-        }
-
-        .declaration-text {
-            color: #374151;
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-        }
-
-        .student-name {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #5b67d1;
-            margin: 1.5rem 0;
-            font-family: 'Playfair Display', serif;
-            position: relative;
-        }
-
-        .student-name::before,
-        .student-name::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 60px;
-            height: 2px;
-            background: #7c3aed;
-        }
-
-        .student-name::before { left: -80px; }
-        .student-name::after { right: -80px; }
-
-        .completion-text {
-            color: #374151;
-            font-weight: 500;
-            margin: 1.5rem 0;
-        }
-
-        .course-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1a202c;
-            margin: 1.5rem 0;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-        }
-
-        .certificate-details {
-            margin-top: 3rem;
-            border-top: 2px solid #e5e7eb;
-            padding-top: 3rem;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            text-align: center;
-        }
-
-        .detail-item {
-            padding: 1rem;
-        }
-
-        .detail-label {
-            font-size: 0.8rem;
-            color: #6b7280;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .detail-value {
-            font-size: 1.1rem;
-            color: #1a202c;
-            font-weight: 700;
-        }
-
-        .signature-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .signature-line {
-            width: 200px;
-            height: 1px;
-            background: #1a202c;
-            margin: 2rem auto 0.5rem;
-        }
-
-        .signature-title {
-            font-size: 0.9rem;
-            color: #6b7280;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .actions-section {
-            margin-top: 3rem;
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .btn-action {
-            padding: 1rem 2.5rem;
-            border: 2px solid #5b67d1;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: #5b67d1;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #4c51bf;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(91, 103, 209, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #5b67d1;
-        }
-
-        .btn-secondary:hover {
-            background: #5b67d1;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-       @media print {
-  body * { visibility: hidden; }
-  #certificado, #certificado * { visibility: visible; }
-  #certificado { position: absolute; top: 0; left: 0; width: 100%; }
-}
-
-
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 2rem 1rem;
-            }
-            
-            .congratulations {
-                font-size: 2rem;
-            }
-            
-            .certificate-container {
-                padding: 2.5rem 2rem;
-            }
-            
-            .certificate-title {
-                font-size: 2.5rem;
-            }
-            
-            .student-name {
-                font-size: 1.8rem;
-            }
-            
-            .student-name::before,
-            .student-name::after {
-                display: none;
-            }
-            
-            .course-name {
-                font-size: 1.5rem;
-            }
-            
-            .certificate-details {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .certificate-body {
-                font-size: 1.1rem;
-            }
-            
-            .actions-section {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn-action {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .certificate-container {
-                padding: 2rem 1.5rem;
-            }
-            
-            .certificate-title {
-                font-size: 2rem;
-                letter-spacing: 1px;
-            }
-            
-            .student-name {
-                font-size: 1.5rem;
-            }
-            
-            .course-name {
-                font-size: 1.3rem;
-            }
-            
-            .corner-ornaments {
-                width: 30px;
-                height: 30px;
-            }
-        }
-   </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <?php include __DIR__ . '/../arquivosReuso/header.php'; ?>

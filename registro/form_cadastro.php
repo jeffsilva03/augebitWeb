@@ -5,10 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Cadastro</title>
+  
+  <link rel="icon" href="src/icone.ico" type="image/x-icon">
   <link rel="stylesheet" href="cadastro.css">
 </head>
 <body>
-  <!-- SPLIT SCREEN -->
   <div class="split left">
     <div class="logo-container">
     </div>

@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// 1) Ajuste o path até o seu conexao.php
+// caminho até o seu conexao.php
 $pathConn = realpath('conexao.php');
 if (!$pathConn || !file_exists($pathConn)) {
     $possible_paths = [
@@ -28,7 +28,7 @@ if (!$pathConn || !file_exists($pathConn)) {
     require_once $pathConn;
 }
 
-// 2) Normaliza o nome da variável de conexão
+
 if (!isset($conn) && isset($conexao)) {
     $conn = $conexao;
 }
@@ -58,21 +58,21 @@ if ($userId) {
     $stmt->close();
 }
 
-// 4) Função para encontrar o caminho correto da logo
+// função para encontrar o caminho correto da logo
 function findLogoPath() {
     $currentDir = dirname(__FILE__);
     $documentRoot = $_SERVER['DOCUMENT_ROOT'];
     
-    // Se o header.php está em arquivosReuso, a logo está na mesma pasta em src/
+    // possíveis caminhos da logo
     $possiblePaths = [
-        'logo.png',              // Mesma pasta do header
-        'src/logo.png',          // Pasta src ao lado do header
-        '../logo.png',           // Uma pasta acima
-        '../src/logo.png',       // Pasta src uma pasta acima
-        '../../src/logo.png',    // Pasta src duas pastas acima
-        '../../../src/logo.png', // Pasta src três pastas acima
-        '../../../../src/logo.png', // Pasta src quatro pastas acima
-        '../../../../../src/logo.png' // Pasta src cinco pastas acima
+        'logo.png',              
+        'src/logo.png',          
+        '../logo.png',           
+        '../src/logo.png',       
+        '../../src/logo.png',    
+        '../../../src/logo.png', 
+        '../../../../src/logo.png', 
+        '../../../../../src/logo.png' 
     ];
     
     foreach ($possiblePaths as $path) {
@@ -93,14 +93,14 @@ function findLogoPath() {
         }
     }
     
-    // Fallback específico para estrutura arquivosReuso
+  
     $scriptPath = $_SERVER['SCRIPT_NAME'];
     $pathParts = explode('/', trim($scriptPath, '/'));
     
-    // Remove o nome do arquivo atual
+
     array_pop($pathParts);
     
-    // Constrói caminho de volta para arquivosReuso
+   
     $backPath = '';
     $foundReuso = false;
     
@@ -116,11 +116,11 @@ function findLogoPath() {
         return $backPath . 'src/logo.png';
     }
     
-    // Último recurso
+   
     return 'src/logo.png';
 }
 
-// 5) Função para calcular base path mais robusta
+
 function calculateBasePath() {
     $scriptName = $_SERVER['SCRIPT_NAME'];
     $depth = substr_count($scriptName, '/') - 2;
@@ -130,7 +130,7 @@ function calculateBasePath() {
 $logoPath = findLogoPath();
 $basePath = calculateBasePath();
 
-// 6) Função para encontrar avatar path
+// função para encontrar avatar path
 function findAvatarPath($avatarUrl, $basePath) {
     if (empty($avatarUrl) || $avatarUrl === "curso/usuario/paginaPerfil/uploads/avatars/default-avatar.png") {
         $possibleDefaultPaths = [
@@ -159,7 +159,7 @@ function findAvatarPath($avatarUrl, $basePath) {
 
 $avatarPath = findAvatarPath($avatarUrl, $basePath);
 
-// 7) Define os itens do header-nav
+// define os itens do header-nav
 $navItems = [
     ['href' => 'paginaInicial/paginaInicial.php',           'icon' => 'fa-home',         'text' => 'Home'],
     ['href' => 'paginaInicial/paginaInicial.php#sobre',     'icon' => 'fa-info-circle',  'text' => 'Sobre nós'],
@@ -167,7 +167,7 @@ $navItems = [
     ['href' => 'paginaInicial/paginaInicial.php#faleConosco','icon' => 'fa-envelope',     'text' => 'Contato'],
 ];
 
-// 8) Define os itens do avatar dropdown
+//  itens do avatar dropdown
 $menuItems = [
     ['href' => 'curso/usuario/paginaPerfil/pgnUser.php', 'label' => '<i class="fas fa-user"></i> Perfil'],
     ['href' => 'notas.php',                             'label' => '<i class="fas fa-chart-bar"></i> Notas'],
@@ -182,10 +182,10 @@ $menuItems = [
   <meta charset="UTF-8">
   <title>Augebit</title>
   <link rel="icon" href="src/icone.ico" type="image/x-icon">
-  <!-- Font Awesome -->
+  
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <!-- Google Fonts - Poppins -->
+ 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -248,7 +248,7 @@ $menuItems = [
       transform: scale(1.05);
     }
     
-    /* Fallback para quando a logo não carregar */
+   
     .header .logo img:not([src]),
     .header .logo img[src=""],
     .header .logo img:broken {
@@ -435,14 +435,14 @@ $menuItems = [
       transform: scale(1.2);
     }
 
-    /* Separador no dropdown */
+    
     .dropdown-divider {
       height: 1px;
       margin: 8px 0;
       background: linear-gradient(to right, transparent, rgba(155, 48, 255, 0.2), transparent);
     }
     
-    /* Mobile menu */
+
     .mobile-menu-toggle {
       display: none;
       background: none;
@@ -579,7 +579,6 @@ $menuItems = [
   </div>
 
   <script>
-    // Avatar dropdown
     const toggle = document.getElementById('avatarToggle');
     const menu   = document.getElementById('avatarMenu');
     toggle.addEventListener('click', e => {

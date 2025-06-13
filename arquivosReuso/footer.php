@@ -1,8 +1,6 @@
 <?php
-// footer.php
 ?>
 
-<!-- Font Awesome (Ícones Sociais) -->
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -13,8 +11,8 @@
     --bg-color: #000;
     --text-main: #eee;
     --text-secondary: #777;
-    --accent: #9b30ff;       /* Azul da sua logo */
-    --hover-line: #9b30ff;   /* Roxo para a linha de hover */
+    --accent: #9b30ff;       
+    --hover-line: #9b30ff;  
   }
 
   .footer {
@@ -70,7 +68,7 @@
     width: 100%;
   }
 
-  /* Ícones sociais em linha separada */
+  /* Ícones em linha separada */
   .social-icons {
     list-style: none;
     padding: 0;
@@ -97,7 +95,7 @@
     color: var(--bg-color);
   }
 
-  /* Rodapé inferior */
+
   .footer-bottom {
     font-size: 13px;
     color: var(--text-secondary);
@@ -128,7 +126,7 @@
     <li><a href="#">Contato</a></li>
   </ul>
 
-  <!-- Ícones sociais (linha separada) -->
+  <!-- Ícones sociais  -->
   <ul class="social-icons">
     <li><a href="#"><i class="fab fa-twitter"></i></a></li>
     <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>

@@ -10,181 +10,7 @@ $pagamento = $_SESSION['pagamento_sucesso'];
 unset($_SESSION['pagamento_sucesso']); // Limpar da sessão
 include_once '../../arquivosReuso/header.php';
 ?>
-<style>
-    .success-container {
-        max-width: 600px;
-        margin: 2rem auto;
-        padding: 2rem;
-        text-align: center;
-    }
-    .success-card {
-        background: white;
-        border-radius: 20px;
-        padding: 3rem 2rem;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        position: relative;
-        overflow: hidden;
-    }
-    .success-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(135deg, #10b981, #059669);
-    }
-    .success-icon {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #10b981, #059669);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 2rem;
-        animation: successPulse 2s ease-in-out infinite;
-    }
-    .success-icon i {
-        font-size: 2.5rem;
-        color: white;
-    }
-    @keyframes successPulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-    .success-title {
-        color: #1f2937;
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-    }
-    .success-subtitle {
-        color: #6b7280;
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-        line-height: 1.6;
-    }
-    .payment-details {
-        background: #f8fafc;
-        border-radius: 12px;
-        padding: 2rem;
-        margin: 2rem 0;
-        text-align: left;
-    }
-    .detail-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #e5e7eb;
-    }
-    .detail-row:last-child {
-        border-bottom: none;
-        font-weight: 700;
-        font-size: 1.1rem;
-        color: #059669;
-    }
-    .detail-label {
-        color: #6b7280;
-        font-weight: 500;
-    }
-    .detail-value {
-        color: #1f2937;
-        font-weight: 600;
-    }
-    .success-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 2rem;
-    }
-    .btn {
-        padding: 1rem 2rem;
-        border-radius: 12px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border: none;
-        min-width: 160px;
-    }
-    .btn-primary {
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
-        color: white;
-    }
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #2563eb, #1d4ed8);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-    }
-    .btn-secondary {
-        background: #f3f4f6;
-        color: #374151;
-        border: 2px solid #e5e7eb;
-    }
-    .btn-secondary:hover {
-        background: #e5e7eb;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-    .confetti {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: #fbbf24;
-        animation: confetti-fall 3s linear infinite;
-    }
-    .confetti:nth-child(1) { left: 10%; animation-delay: 0s; background: #ef4444; }
-    .confetti:nth-child(2) { left: 20%; animation-delay: 0.2s; background: #10b981; }
-    .confetti:nth-child(3) { left: 30%; animation-delay: 0.4s; background: #3b82f6; }
-    .confetti:nth-child(4) { left: 40%; animation-delay: 0.6s; background: #8b5cf6; }
-    .confetti:nth-child(5) { left: 50%; animation-delay: 0.8s; background: #f59e0b; }
-    .confetti:nth-child(6) { left: 60%; animation-delay: 1s; background: #ef4444; }
-    .confetti:nth-child(7) { left: 70%; animation-delay: 1.2s; background: #10b981; }
-    .confetti:nth-child(8) { left: 80%; animation-delay: 1.4s; background: #3b82f6; }
-    .confetti:nth-child(9) { left: 90%; animation-delay: 1.6s; background: #8b5cf6; }
-    
-    @keyframes confetti-fall {
-        0% {
-            transform: translateY(-100vh) rotate(0deg);
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
-        }
-    }
-    .success-message {
-        background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-        border: 2px solid #22c55e;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1.5rem 0;
-        color: #166534;
-        font-weight: 600;
-    }
-    @media (max-width: 768px) {
-        .success-container {
-            margin: 1rem;
-            padding: 1rem;
-        }
-        .success-card {
-            padding: 2rem 1.5rem;
-        }
-        .success-title {
-            font-size: 2rem;
-        }
-        .success-actions {
-            flex-direction: column;
-        }
-        .btn {
-            width: 100%;
-        }
-    }
-</style>
+<link rel="stylesheet" href="pagamento-sucesso.css">
 
 <div class="success-container">
     <!-- Confetti Animation -->
@@ -237,18 +63,15 @@ include_once '../../arquivosReuso/header.php';
         </div>
 
         <div class="success-actions">
-            <a href="<?php echo $pagamento['curso_url']; ?>" class="btn btn-primary">
+            <a href="../../listaCursos/listagemCursos.php" class="btn btn-primary">
                 <i class="fas fa-play-circle"></i> Acessar Curso Agora
-            </a>
-            <a href="listagemCursos.php" class="btn btn-secondary">
-                <i class="fas fa-list"></i> Ver Todos os Cursos
             </a>
         </div>
 
         <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
             <p style="color: #6b7280; font-size: 0.9rem;">
                 <i class="fas fa-info-circle"></i>
-                Um e-mail de confirmação foi enviado para seu endereço cadastrado com os detalhes da compra.
+             A liberação do curso adquirido pode levar até 10 minutos
             </p>
         </div>
     </div>

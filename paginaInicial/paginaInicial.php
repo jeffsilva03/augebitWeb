@@ -1,11 +1,10 @@
 <?php
-// paginaInicial.php
 ob_start();
 session_start();
 
-include '../conexaoBD/conexao.php'; // fornece $conexao (mysqli)
+include '../conexaoBD/conexao.php'; 
 
-// inicializa variáveis
+
 $nome = $email = $mensagem = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['mensagem_feedback'] = 'Por favor, preencha todos os campos corretamente.';
     }
 
-    // PRG: limpa o POST e evita reenvio
+    
     header("Location: " . $_SERVER['PHP_SELF'] . "#faleConosco");
     exit;
 }
@@ -47,11 +46,9 @@ include 'header.php';
   <link rel="icon" href="src/icone.ico" type="image/x-icon">
 
 
-  <!-- Fonte moderna -->
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Variáveis de tema */
-    /* Variáveis de tema */
 :root {
   --font-base: 'Poppins', sans-serif;
   --clr-bg: #f5f6fa;
@@ -66,7 +63,7 @@ include 'header.php';
   --transition: 0.4s ease;
 }
 
-/* Reset */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   color: var(--clr-dark);
@@ -76,7 +73,7 @@ body {
 a { font-family: 'Poppins'; text-decoration: none; color: inherit; }
 img { display: block; max-width: 100%; }
 
-/* Utility */
+
 .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
 
 
@@ -95,11 +92,11 @@ h2.section-title::after {
   bottom: -0.6rem; border-radius: 2px;
 }
 
-/* Fade-up */
+
 .fade-up { opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s; }
 .fade-up.visible { opacity: 1; transform: translateY(0); }
 
-/* Hero Section Aprimorada */
+
 .heroi {
     position: relative;
     display: flex;
@@ -113,7 +110,7 @@ h2.section-title::after {
     overflow: hidden;
 }
 
-/* Background decorativo */
+
 .heroi::before {
     content: '';
     position: absolute;
@@ -128,7 +125,7 @@ h2.section-title::after {
     animation: gradientShift 8s ease-in-out infinite;
 }
 
-/* Partículas flutuantes */
+
 .hero-particles {
     position: absolute;
     top: 0;
@@ -156,7 +153,7 @@ h2.section-title::after {
 .particle:nth-child(6) { left: 80%; animation-delay: 1.5s; animation-duration: 8s; }
 .particle:nth-child(7) { left: 90%; animation-delay: 2.5s; animation-duration: 7s; }
 
-/* Formas geométricas decorativas */
+
 .hero-shapes {
     position: absolute;
     top: 0;
@@ -200,7 +197,7 @@ h2.section-title::after {
     animation-duration: 20s;
 }
 
-/* Conteúdo */
+
 .hero-content {
     position: relative;
     z-index: 3;
@@ -329,7 +326,7 @@ h2.section-title::after {
     transition: all 0.1s ease;
 }
 
-/* Indicador de scroll */
+
 .scroll-indicator {
     position: absolute;
     bottom: 2rem;
@@ -358,7 +355,7 @@ h2.section-title::after {
     transform: rotate(45deg);
 }
 
-/* Estatísticas flutuantes */
+
 .hero-stats {
     position: absolute;
     top: 50%;
@@ -394,7 +391,7 @@ h2.section-title::after {
     font-weight: 300;
 }
 
-/* Animações */
+
 @keyframes gradientShift {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.8; }
@@ -438,7 +435,7 @@ h2.section-title::after {
     }
 }
 
-/* Responsivo */
+
 @media (max-width: 768px) {
     .heroi {
         min-height: 100vh;
@@ -486,7 +483,7 @@ h2.section-title::after {
     }
 }
 
-        /* Seção Sobre - Nova Identidade */
+       
         .sobre {
             position: relative;
             padding: 6rem 0;
@@ -707,7 +704,7 @@ h2.section-title::after {
             50% { opacity: 0.15; transform: scale(1.1); }
         }
 
-        /* Responsividade */
+       
         @media (max-width: 768px) {
             .sobre {
                 padding: 4rem 0;
@@ -751,7 +748,7 @@ h2.section-title::after {
             }
         }
 
-        /* Animações de entrada */
+        
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
@@ -770,7 +767,7 @@ h2.section-title::after {
         .feature-item:nth-child(3) { animation-delay: 0.3s; }
         .feature-item:nth-child(4) { animation-delay: 0.4s; }
 
-/* Recursos */
+
 .recursos { padding: 4rem 0; }
 .recursos .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 1.5rem; }
 .recursos .card { 
@@ -787,7 +784,7 @@ h2.section-title::after {
 }
 .recursos i { font-size: 2.5rem; color: var(--clr-purple-dark); margin-bottom: 1rem; }
 
-/* Cursos em Destaque */
+
 #cursos { background: var(--clr-bg); padding: 4rem 0; }
 #cursos .descricao { text-align: center; color: var(--clr-gray); margin-bottom: 2rem; font-size: 1rem; }
 #cursos .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; }
@@ -820,7 +817,7 @@ h2.section-title::after {
   display:flex; justify-content:space-between; align-items:center;
   font-size:.875rem; color:var(--clr-gray); margin-bottom:1rem;
 }
-/* Preço em destaque */
+
 #cursos .detalhes .preco {
   font-weight:700; font-size:1.1rem; color: var(--clr-purple);
 }
@@ -906,14 +903,14 @@ h2.section-title::after {
     transition: all 0.1s ease;
 }
 
-/* Animação fade-up */
+
 .fade-up {
     opacity: 1;
     transform: translateY(0);
     transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Seção de depoimentos */
+
 #depoimentos {
     padding: 120px 0;
     position: relative;
@@ -961,7 +958,7 @@ h2.section-title::after {
     }
 }
 
-/* Descrição */
+
 .descricao {
     font-size: 1.25rem;
     color: #b3b3b3;
@@ -976,7 +973,7 @@ h2.section-title::after {
     z-index: 2;
 }
 
-/* Container dos cartões */
+
 .cartoes-depoimento {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -986,7 +983,7 @@ h2.section-title::after {
     z-index: 2;
 }
 
-/* Cartão individual de depoimento */
+
 .depoimento {
   background: linear-gradient(135deg, #0a0a0a 10%, #1a0d26 50%, #0a0a0a 100%);
   backdrop-filter: blur(20px);
@@ -1025,7 +1022,7 @@ h2.section-title::after {
     opacity: 1;
 }
 
-/* Badge de categoria */
+
 .badge-cat {
     display: inline-block;
     background: linear-gradient(135deg, #9333ea, #7c3aed);
@@ -1064,7 +1061,7 @@ h2.section-title::after {
     box-shadow: 0 6px 24px rgba(147, 51, 234, 0.4);
 }
 
-/* Texto do depoimento */
+
 .depoimento p {
     font-size: 1.125rem;
     line-height: 1.8;
@@ -1087,7 +1084,7 @@ h2.section-title::after {
     z-index: -1;
 }
 
-/* Autor do depoimento */
+
 .autor {
     display: flex;
     align-items: center;
@@ -1118,7 +1115,9 @@ h2.section-title::after {
     transform: rotate(360deg) scale(1.1);
 }
 
-/* Responsividade para tablets */
+
+
+/* Responsividade */
 @media (max-width: 1024px) {
     #depoimentos {
         padding: 100px 0;
@@ -1134,7 +1133,7 @@ h2.section-title::after {
     }
 }
 
-/* Responsividade para mobile */
+
 @media (max-width: 768px) {
     #depoimentos {
         padding: 80px 0;
@@ -1185,7 +1184,7 @@ h2.section-title::after {
     }
   }
 
-        /* Animações adicionais */
+      
         @keyframes float {
             0%, 100% {
                 transform: translateY(0px);
@@ -1205,13 +1204,13 @@ h2.section-title::after {
             animation-delay: 4s;
         }
 
-        /* Efeitos de glassmorphism aprimorados */
+        
         .depoimento {
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
         }
 
-        /* Micro-interações */
+     
         .badge-cat {
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1222,7 +1221,7 @@ h2.section-title::after {
             box-shadow: 0 6px 24px rgba(147, 51, 234, 0.4);
         }
 
-        /* Estados de foco para acessibilidade */
+      
         .depoimento:focus-within {
             outline: 2px solid #9333ea;
             outline-offset: 4px;
@@ -1230,7 +1229,6 @@ h2.section-title::after {
 
         
 
-    /* Fale Conosco */
     #faleConosco { background:#f5f6fa; padding:4rem 0; }
     #faleConosco .descricao { text-align:center; color:var(--clr-gray); margin-bottom:3rem; }
     #faleConosco .container { display:flex; max-width:1200px; margin:0 auto; gap:2rem; }
@@ -1275,9 +1273,8 @@ h2.section-title::after {
 <body>
 
 <main>
-    <!-- HEROI APRIMORADO -->
+   
     <section class="heroi fade-up">
-        <!-- Partículas flutuantes -->
         <div class="hero-particles">
             <div class="particle"></div>
             <div class="particle"></div>
@@ -1288,7 +1285,7 @@ h2.section-title::after {
             <div class="particle"></div>
         </div>
 
-        <!-- Formas geométricas -->
+        
         <div class="hero-shapes">
             <div class="shape"></div>
             <div class="shape"></div>
@@ -1310,7 +1307,7 @@ h2.section-title::after {
             </div>
         </div>
 
-        <!-- Indicador de scroll -->
+       
         <div class="scroll-indicator">
             <span>Role para baixo</span>
             <div class="scroll-arrow"></div>
@@ -1353,7 +1350,7 @@ h2.section-title::after {
             </div>
         </div>
         
-        <!-- Elementos decorativos -->
+      
         <div class="decorative-elements">
             <div class="decorative-circle"></div>
             <div class="decorative-circle"></div>
@@ -1434,7 +1431,7 @@ h2.section-title::after {
           </div>
         </div>
       </div>
-      <a href="#cursos" class="ver-todos">Ver Todos os Cursos</a>
+      <a href="../listaCursos/listagemCursos.php" class="ver-todos">Ver Todos os Cursos</a>
     </div>
   </section>
 
@@ -1516,7 +1513,6 @@ h2.section-title::after {
 <?php include '../arquivosReuso/footer.php'; ?>
 
 <script>
-  // Reveal on scroll
   document.querySelectorAll('.fade-up').forEach(el => {
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {

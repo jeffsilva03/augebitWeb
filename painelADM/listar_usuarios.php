@@ -13,6 +13,8 @@ $result = $conexao->query("SELECT id,nome,email,perfil FROM cadastro ORDER BY id
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Listar Usuários</title>
+  
+  <link rel="icon" href="src/icone.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,7 +51,7 @@ $result = $conexao->query("SELECT id,nome,email,perfil FROM cadastro ORDER BY id
     }
     
     
-    /* Main content */
+   
     main.container {
       max-width: 1400px;
       width: 100%;
@@ -94,7 +96,7 @@ $result = $conexao->query("SELECT id,nome,email,perfil FROM cadastro ORDER BY id
       color: var(--clr-purple);
     }
     
-    /* Actions bar */
+  
     .actions-bar {
       display: flex;
       justify-content: space-between;
@@ -153,7 +155,7 @@ $result = $conexao->query("SELECT id,nome,email,perfil FROM cadastro ORDER BY id
       box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
     }
     
-    /* Table styles */
+
     .table-container {
       overflow-x: auto;
       border-radius: var(--radius);
@@ -247,7 +249,7 @@ $result = $conexao->query("SELECT id,nome,email,perfil FROM cadastro ORDER BY id
       filter: brightness(0.9);
     }
     
-    /* Animations */
+   
     .animar-fadein {
       animation: fadeIn 0.5s ease forwards;
     }
@@ -263,7 +265,7 @@ $result = $conexao->query("SELECT id,nome,email,perfil FROM cadastro ORDER BY id
       }
     }
     
-    /* Responsive adjustments */
+   
     @media (max-width: 768px) {
       .actions-bar {
         flex-direction: column;
