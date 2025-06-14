@@ -1,5 +1,5 @@
 <?php
-// curso.php - Versão corrigida com avaliação interativa funcional
+// curso.php - Versão corrigida com suporte completo a vídeos do YouTube/Vimeo
 session_start();
 
 // Verificar se o usuário está logado
@@ -16,6 +16,61 @@ $curso_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($curso_id <= 0) {
     die("Curso não encontrado. ID inválido.");
+}
+
+// Função para converter URLs do YouTube/Vimeo para embed
+function convertToEmbedUrl($url) {
+    if (empty($url)) return '';
+    
+    // Limpar a URL
+    $url = trim($url);
+    
+    // YouTube
+    if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/', $url, $matches)) {
+        return 'https://www.youtube.com/embed/' . $matches[1] . '?rel=0&modestbranding=1';
+    }
+    
+    // Vimeo
+    if (preg_match('/(?:vimeo\.com\/)([0-9]+)/', $url, $matches)) {
+        return 'https://player.vimeo.com/video/' . $matches[1];
+    }
+    
+    // Se já é uma URL de embed, retorna como está
+    if (strpos($url, 'embed') !== false || strpos($url, 'player.vimeo') !== false) {
+        return $url;
+    }
+    
+    // Para outros tipos de vídeo (MP4, etc.)
+    return $url;
+}
+
+// Função para verificar se é um vídeo embedável
+function isEmbeddableVideo($url) {
+    if (empty($url)) return false;
+    
+    return (
+        strpos($url, 'youtube.com') !== false ||
+        strpos($url, 'youtu.be') !== false ||
+        strpos($url, 'vimeo.com') !== false ||
+        strpos($url, 'embed') !== false ||
+        strpos($url, 'player.vimeo') !== false
+    );
+}
+
+// Função para verificar se é um arquivo de vídeo direto
+function isDirectVideo($url) {
+    if (empty($url)) return false;
+    
+    $video_extensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    $url_lower = strtolower($url);
+    
+    foreach ($video_extensions as $ext) {
+        if (strpos($url_lower, $ext) !== false) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 // Processar envio de avaliação
@@ -41,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_avaliacao'])) 
         for ($i = 1; $i <= 10; $i++) {
             if (!empty($avaliacao_data["pergunta$i"])) {
                 $total_questoes++;
-               $gabarito = $avaliacao_data["resposta_correta$i"] ?? '';
+                $gabarito = $avaliacao_data["resposta_correta$i"] ?? '';
                 $resposta_usuario = $respostas[$i] ?? '';
                 
                 if (strtoupper($gabarito) === strtoupper($resposta_usuario)) {
@@ -78,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_avaliacao'])) 
             
             if ($stmtUpdate->execute()) {
                 $status_aprovacao = $aprovado ? "APROVADO" : "REPROVADO";
-$mensagem_avaliacao = "success|Avaliação concluída! Nota: $nota/10 - $status_aprovacao ($acertos/$total_questoes acertos)";
+                $mensagem_avaliacao = "success|Avaliação concluída! Nota: $nota/10 - $status_aprovacao ($acertos/$total_questoes acertos)";
             } else {
                 $mensagem_avaliacao = "error|Erro ao atualizar avaliação.";
             }
@@ -91,22 +146,22 @@ $mensagem_avaliacao = "success|Avaliação concluída! Nota: $nota/10 - $status_
             
             $stmtInsert = $conn->prepare($sqlInsert);
             $resp1 = $respostas[1] ?? '';
-$resp2 = $respostas[2] ?? '';
-$resp3 = $respostas[3] ?? '';
-$resp4 = $respostas[4] ?? '';
-$resp5 = $respostas[5] ?? '';
-$resp6 = $respostas[6] ?? '';
-$resp7 = $respostas[7] ?? '';
-$resp8 = $respostas[8] ?? '';
-$resp9 = $respostas[9] ?? '';
-$resp10 = $respostas[10] ?? '';
+            $resp2 = $respostas[2] ?? '';
+            $resp3 = $respostas[3] ?? '';
+            $resp4 = $respostas[4] ?? '';
+            $resp5 = $respostas[5] ?? '';
+            $resp6 = $respostas[6] ?? '';
+            $resp7 = $respostas[7] ?? '';
+            $resp8 = $respostas[8] ?? '';
+            $resp9 = $respostas[9] ?? '';
+            $resp10 = $respostas[10] ?? '';
 
-$stmtInsert->bind_param("iissssssssssdi", 
-    $usuario_id, $curso_id, $resp1, $resp2, 
-    $resp3, $resp4, $resp5, 
-    $resp6, $resp7, $resp8, 
-    $resp9, $resp10, $nota, $aprovado
-);
+            $stmtInsert->bind_param("iissssssssssdi", 
+                $usuario_id, $curso_id, $resp1, $resp2, 
+                $resp3, $resp4, $resp5, 
+                $resp6, $resp7, $resp8, 
+                $resp9, $resp10, $nota, $aprovado
+            );
             
             if ($stmtInsert->execute()) {
                 $mensagem_avaliacao = "success|Avaliação enviada! Em breve sua avaliação será corrigida";
@@ -227,8 +282,8 @@ if ($stmtAtividades) {
     }
 }
 
-// Buscar aulas do curso
-$sqlAulas = "SELECT * FROM aula WHERE curso_id = ?";
+// Buscar aulas do curso - CONSULTA CORRIGIDA
+$sqlAulas = "SELECT * FROM aula WHERE curso_id = ? ORDER BY id ASC";
 $stmtAulas = $conn->prepare($sqlAulas);
 $aulas = [];
 if ($stmtAulas) {
@@ -302,6 +357,83 @@ require_once '../arquivosReuso/header.php';
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="curso.css">
+    <style>
+        /* Estilos específicos para vídeos */
+        .video-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .video-container h4 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            overflow: hidden;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-player {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            border-radius: 8px;
+        }
+
+        .video-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .no-videos-message {
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            color: #666;
+        }
+
+        .no-videos-message i {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .video-container {
+                padding: 15px;
+            }
+            
+            .video-wrapper {
+                padding-bottom: 56.25%;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -413,21 +545,81 @@ require_once '../arquivosReuso/header.php';
         </div>
         <?php endif; ?>
 
-        <!-- Aulas -->
+        <!-- Aulas - SEÇÃO CORRIGIDA -->
         <?php if (!empty($aulas)): ?>
         <div class="content-section">
-            <h2 class="section-title"><i class="fas fa-play-circle"></i> Aulas</h2>
-            <?php foreach ($aulas as $index => $aula): ?>
-                <?php if (!empty($aula['videoAula']) && $aula['videoAula'] !== '0'): ?>
+            <h2 class="section-title"><i class="fas fa-play-circle"></i> Aulas do Curso</h2>
+            <?php 
+            $aulas_com_video = 0;
+            foreach ($aulas as $index => $aula): 
+                // Verificar se existe vídeo na aula
+                $video_url = '';
+                if (!empty($aula['videoAula']) && $aula['videoAula'] !== '0') {
+                    $video_url = $aula['videoAula'];
+                    $aulas_com_video++;
+                }
+                
+                if (!empty($video_url)):
+            ?>
                 <div class="video-container">
-                    <h4>Aula <?php echo $index + 1; ?></h4>
-                    <video class="video-player" controls>
-                        <source src="<?php echo htmlspecialchars($aula['videoAula']); ?>" type="video/mp4">
-                        Seu navegador não suporta o elemento de vídeo.
-                    </video>
+                    <h4>
+                        <i class="fas fa-play-circle"></i> 
+                        Aula <?php echo $index + 1; ?>
+                        <?php if (!empty($aula['titulo'])): ?>
+                            - <?php echo htmlspecialchars($aula['titulo']); ?>
+                        <?php endif; ?>
+                    </h4>
+                    
+                    <?php if (isEmbeddableVideo($video_url)): ?>
+                        <div class="video-wrapper">
+                            <iframe 
+                                src="<?php echo convertToEmbedUrl($video_url); ?>" 
+                                title="Aula <?php echo $index + 1; ?>"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    <?php elseif (isDirectVideo($video_url)): ?>
+                        <video class="video-player" controls>
+                            <source src="<?php echo htmlspecialchars($video_url); ?>" type="video/mp4">
+                            Seu navegador não suporta o elemento de vídeo.
+                        </video>
+                    <?php else: ?>
+                        <div class="video-info">
+                            <p><strong>Link do vídeo:</strong> <a href="<?php echo htmlspecialchars($video_url); ?>" target="_blank"><?php echo htmlspecialchars($video_url); ?></a></p>
+                            <p><em>Clique no link acima para assistir ao vídeo</em></p>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if (!empty($aula['descricao'])): ?>
+                    <div class="video-info">
+                        <strong>Descrição:</strong> <?php echo nl2br(htmlspecialchars($aula['descricao'])); ?>
+                    </div>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
+            <?php 
+                endif;
+            endforeach; 
+            
+            // Se não há aulas com vídeo, mostrar mensagem
+            if ($aulas_com_video === 0):
+            ?>
+            <div class="no-videos-message">
+                <i class="fas fa-video-slash"></i>
+                <h3>Nenhum vídeo disponível</h3>
+                <p>As aulas para este curso ainda não foram adicionadas ou não possuem vídeos.</p>
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php else: ?>
+        <div class="content-section">
+            <h2 class="section-title"><i class="fas fa-play-circle"></i> Aulas do Curso</h2>
+            <div class="no-videos-message">
+                <i class="fas fa-video-slash"></i>
+                <h3>Nenhuma aula disponível</h3>
+                <p>As aulas para este curso ainda não foram criadas.</p>
+            </div>
         </div>
         <?php endif; ?>
 

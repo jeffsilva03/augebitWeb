@@ -77,7 +77,7 @@ include_once '../../arquivosReuso/header.php';
 
 
 <div class="payment-container">
-    <a href="listagemCursos.php" class="back-link">
+    <a href="../../listaCursos/listagemCursos.php" class="back-link">
         <i class="fas fa-arrow-left"></i>
         Voltar aos cursos
     </a>

@@ -1393,7 +1393,7 @@ h2.section-title::after {
                 <span><i class="fas fa-star"></i> 4.9</span>
               </div>
             </div>
-            <a href="#" class="botao">Saiba Mais</a>
+            <a href="../listaCursos/listagemCursos.php" class="botao">Saiba Mais</a>
           </div>
         </div>
         <!-- Curso 2 -->
@@ -1402,7 +1402,7 @@ h2.section-title::after {
           <div class="conteudo">
             <div class="categoria"><i class="fas fa-bullhorn"></i> Aplicativos</div>
             <h4>React Native</h4>
-            <p>Faça aplicativos móveis completos para Android e iOS com React Native, JavaScript, Expo, APIs, banco de dados e muito mais."</p>
+            <p>Faça aplicativos móveis completos para Android e iOS com React Native, JavaScript, Expo, APIs, banco de dados e muito mais.</p>
             <div class="detalhes">
               <div class="preco">R$ 449,90</div>
               <div class="info">
@@ -1410,7 +1410,7 @@ h2.section-title::after {
                 <span><i class="fas fa-star"></i> 4.8</span>
               </div>
             </div>
-            <a href="#" class="botao">Saiba Mais</a>
+            <a href="../listaCursos/listagemCursos.php" class="botao">Saiba Mais</a>
           </div>
         </div>
         <!-- Curso 3 -->
@@ -1427,7 +1427,7 @@ h2.section-title::after {
                 <span><i class="fas fa-star"></i> 4.9</span>
               </div>
             </div>
-            <a href="#" class="botao">Saiba Mais</a>
+            <a href="../listaCursos/listagemCursos.php" class="botao">Saiba Mais</a>
           </div>
         </div>
       </div>
