@@ -1,12 +1,7 @@
 <?php
 include '../arquivosReuso/conexao.php';
-
-// Definir o título da página
 $page_title = 'Meus Cursos - Dashboard';
-
-// Incluir cabeçalho
 require_once 'headerInstrutor.php';
-// Buscar estatísticas do banco
 $query_usuarios = "SELECT COUNT(*) as total FROM cadastro WHERE perfil IN ('usuario', 'usuarioGeral')";
 $result_usuarios = $conn->query($query_usuarios);
 $total_usuarios = $result_usuarios->fetch_assoc()['total'];
@@ -23,7 +18,7 @@ $query_mensagens = "SELECT COUNT(*) as total FROM contate_nos";
 $result_mensagens = $conn->query($query_mensagens);
 $total_mensagens = $result_mensagens->fetch_assoc()['total'];
 
-// Buscar cursos com informações do instrutor usando prepared statement
+
 $query_cursos_lista = "
     SELECT c.*, ca.nome as instrutor_nome 
     FROM cursos c 
@@ -34,7 +29,7 @@ $stmt = $conn->prepare($query_cursos_lista);
 $stmt->execute();
 $result_cursos_lista = $stmt->get_result();
 
-// Buscar usuários recentes
+
 $query_usuarios_lista = "
     SELECT nome, email, perfil, avatar
     FROM cadastro
@@ -55,16 +50,15 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
     
   <link rel="icon" href="src/icone.ico" type="image/x-icon">
      <link rel="icon" href="/../arquivosReuso/src/icone.ico" type="image/x-icon">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Animate.css -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
-    <!-- Lucide Icons -->
+   
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <link rel="stylesheet" href="style.css">
@@ -73,7 +67,6 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
 
 <body class="animate__animated animate__fadeIn">
     <div class="container">
-        <!-- Cabeçalho da Página -->
         <header class="page-header animate-fade-in-up">
             <div>
                 <h1 class="page-title">
@@ -96,7 +89,7 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
 
         
 
-        <!-- Cards de Estatísticas -->
+        
         <div class="stats-grid">
             <div class="stat-card animate-fade-in-up animate-delay-1">
                 <div class="stat-content">
@@ -113,7 +106,7 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
             
         </div>
 
-        <!-- Card Principal com Tabela -->
+       
         <div class="main-card animate-fade-in-up">
             <div class="card-header">
                 <div class="card-header-left">
@@ -273,7 +266,7 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
             </div>
         </div>
 
-        <!-- Card de Ações em Massa (apenas se houver cursos) -->
+      
         <?php if ($total_cursos > 0): ?>
        
         </div>
@@ -281,11 +274,10 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
     </div>
 
     <script>
-        // Inicializar Lucide Icons
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
             
-            // Animação dos contadores
+           
             const counters = document.querySelectorAll('.counter');
             counters.forEach(counter => {
                 const target = parseInt(counter.getAttribute('data-target'));
@@ -303,11 +295,11 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
                     }
                 };
                 
-                // Iniciar animação após um pequeno delay
+             
                 setTimeout(updateCounter, 600);
             });
 
-            // Funcionalidade de busca
+          
             const searchInput = document.getElementById('searchInput');
             const statusFilter = document.getElementById('statusFilter');
             const tableRows = document.querySelectorAll('#coursesTable tbody tr');
@@ -341,7 +333,7 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
                 statusFilter.addEventListener('change', filterTable);
             }
 
-            // Animação de entrada escalonada para os cards
+            
             const statCards = document.querySelectorAll('.stat-card');
             statCards.forEach((card, index) => {
                 card.style.opacity = '0';
@@ -354,7 +346,7 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
                 }, 200 * (index + 1));
             });
 
-            // Efeitos hover avançados para as linhas da tabela
+           
             const allTableRows = document.querySelectorAll('tbody tr');
             allTableRows.forEach(row => {
                 row.addEventListener('mouseenter', function() {
@@ -368,12 +360,11 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
                 });
             });
 
-            // Funcionalidade de seleção em massa
+           
             const selectAllCheckbox = document.getElementById('selectAll');
             const massActionButtons = document.querySelectorAll('#exportSelected, #archiveSelected, #publishSelected, #deleteSelected');
             
             if (selectAllCheckbox) {
-                // Adicionar checkboxes individuais às linhas da tabela
                 allTableRows.forEach(row => {
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
@@ -416,10 +407,9 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
                 }
             }
 
-            // Efeito de loading para botões
+          
             document.querySelectorAll('.btn').forEach(button => {
                 button.addEventListener('click', function(e) {
-                    // Adicionar efeito ripple
                     const ripple = document.createElement('span');
                     const rect = this.getBoundingClientRect();
                     const size = Math.max(rect.width, rect.height);
@@ -449,7 +439,7 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
                 });
             });
 
-            // Animação de pulso para estatísticas quando atualizam
+           
             setInterval(() => {
                 const now = new Date();
                 if (now.getSeconds() === 0) { // A cada minuto
@@ -463,7 +453,6 @@ $result_usuarios_lista = $conn->query($query_usuarios_lista);
             }, 1000);
         });
 
-        // CSS para animação ripple
         const style = document.createElement('style');
         style.textContent = `
             @keyframes ripple {

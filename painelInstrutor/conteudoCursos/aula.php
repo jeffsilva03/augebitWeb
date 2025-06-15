@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Conexão
+
 $mysqli = new mysqli($host, $login, $password, $bd);
 if ($mysqli->connect_error) {
     die("Erro na conexão com o banco de dados: " . $mysqli->connect_error);
@@ -33,12 +33,12 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
         $deleteStmt->close();
     }
     
-    // Redirect para evitar reexecução
+   
     header("Location: " . $_SERVER['PHP_SELF'] . "?msg=" . urlencode($mensagem) . "&type=" . $tipo_mensagem);
     exit();
 }
 
-// Verificar se há mensagem de redirect
+
 if (isset($_GET['msg']) && isset($_GET['type'])) {
     $mensagem = $_GET['msg'];
     $tipo_mensagem = $_GET['type'];
@@ -137,7 +137,7 @@ if ($resultVideos && $resultVideos->num_rows > 0) {
     }
 }
 
-// Incluir header apenas se existe
+
 if (file_exists('headerInstrutor.php')) {
     include_once('headerInstrutor.php');
 }
@@ -156,7 +156,6 @@ $mysqli->close();
     <script type="text/javascript" src="DataTables/datatables.min.js"></script>
     <link rel="stylesheet" href="aula.css">
     <style>
-        /* Reset e base */
         * {
             box-sizing: border-box;
         }
@@ -415,7 +414,7 @@ $mysqli->close();
             font-size: 1rem;
         }
 
-        /* Modal Styles */
+        
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -540,7 +539,7 @@ $mysqli->close();
             color: #1a202c;
         }
 
-        /* Notification Styles */
+      
         .notification {
             position: fixed;
             top: 20px;
@@ -604,7 +603,7 @@ $mysqli->close();
             color: #4a5568;
         }
 
-        /* Loading Animation */
+        
         .loading {
             display: inline-block;
             width: 20px;
@@ -619,7 +618,6 @@ $mysqli->close();
             to { transform: rotate(360deg); }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -717,7 +715,7 @@ $mysqli->close();
             <?php endif; ?>
         </div>
 
-        <!-- Lista de vídeos existentes -->
+      
         <div class="videos-list">
             <h2>📚 Vídeos Cadastrados (<?php echo count($videos_por_curso); ?>)</h2>
             
@@ -789,7 +787,7 @@ $mysqli->close();
         </div>
     </div>
 
-    <!-- Notification Container -->
+    
     <div class="notification" id="notification">
         <button class="notification-close" onclick="closeNotification()">&times;</button>
         <div class="notification-header">
@@ -820,7 +818,7 @@ $mysqli->close();
             return match ? match[1] : false;
         }
 
-        // Função para mostrar preview do vídeo
+        
         function showVideoPreview(url) {
             let embedHtml = '';
             
@@ -849,7 +847,7 @@ $mysqli->close();
             videoPreview.classList.add('show');
         }
 
-        // Event listener para o input de link
+       
         videoLinkInput.addEventListener('input', function() {
             const url = this.value.trim();
             
@@ -858,7 +856,6 @@ $mysqli->close();
             } else if (url === '') {
                 videoPreview.classList.remove('show');
             } else if (url.length > 10) {
-                // Para outros tipos de link, mostrar mensagem genérica
                 videoContainer.innerHTML = `<div style="padding: 40px; text-align: center; color: #6b7280; background: #f3f4f6; border-radius: 8px;">
                     <p style="margin: 0; font-size: 16px;">🔗 Link detectado</p>
                     <p style="font-size: 14px; margin: 10px 0 0 0; color: #9ca3af; word-break: break-all;">
@@ -979,17 +976,17 @@ $mysqli->close();
             document.getElementById('notification').classList.remove('show');
         }
 
-        // Confirmações de ações
+       
         function confirmSave() {
             closeModal();
             
-            // Mostrar loading no botão
+            
             const submitBtn = document.getElementById('submit-btn');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<span class="loading"></span> Salvando...';
             submitBtn.disabled = true;
             
-            // Submeter o formulário
+            
             document.getElementById('video-form').submit();
         }
 
@@ -997,7 +994,7 @@ $mysqli->close();
             closeModal();
             showNotification('info', 'Processando...', 'Removendo vídeo, aguarde...');
             
-            // Redirecionar para exclusão
+        
             setTimeout(() => {
                 window.location.href = `?delete=${id}`;
             }, 1000);
@@ -1057,7 +1054,7 @@ $mysqli->close();
                 return false;
             }
             
-            // Validação adicional de URL
+         
             try {
                 new URL(videoLink.value.trim());
             } catch (error) {
@@ -1078,14 +1075,14 @@ $mysqli->close();
             }
         });
 
-        // Fechar modal com ESC
+        
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && modalOverlay.classList.contains('show')) {
                 closeModal();
             }
         });
 
-        // Ocultar mensagem PHP após carregamento
+       
         <?php if (!empty($mensagem)): ?>
         document.addEventListener('DOMContentLoaded', function() {
             const mensagemDiv = document.getElementById('mensagem');
@@ -1096,29 +1093,25 @@ $mysqli->close();
                 showNotification('error', 'Erro!', '<?php echo addslashes($mensagem); ?>');
                 <?php endif; ?>
                 
-                // Esconder a mensagem original
+                
                 mensagemDiv.style.display = 'none';
             }
         });
         <?php endif; ?>
 
-        // Debug: Mostrar informações no console
-        console.log('📊 Sistema de Upload de Vídeos carregado');
-        console.log('📚 Cursos disponíveis:', <?php echo json_encode($cursos); ?>);
-        console.log('🎥 Vídeos cadastrados:', <?php echo count($videos_por_curso); ?>);
-        
-        // Adicionar evento de carregamento da página
+      
+      
         document.addEventListener('DOMContentLoaded', function() {
             console.log('✅ Página carregada completamente');
             
-            // Verificar se há parâmetros na URL para debug
+           
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('debug') === '1') {
                 console.log('🔍 Modo debug ativado');
                 console.log('📋 Dados completos dos vídeos:', <?php echo json_encode($videos_por_curso); ?>);
             }
 
-            // Mostrar notificação de boas-vindas se não houver mensagem
+       
             <?php if (empty($mensagem)): ?>
             setTimeout(() => {
                 showNotification('info', 'Sistema Carregado', 'Sistema de upload de vídeos pronto para uso!');
@@ -1126,7 +1119,7 @@ $mysqli->close();
             <?php endif; ?>
         });
 
-        // Adicionar efeitos visuais extras
+       
         document.querySelectorAll('.video-item').forEach(item => {
             item.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-4px) scale(1.02)';
@@ -1137,7 +1130,7 @@ $mysqli->close();
             });
         });
 
-        // Animação de entrada para os elementos
+  
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {

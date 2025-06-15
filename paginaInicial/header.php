@@ -1,10 +1,9 @@
 <?php
-// Iniciar a sessão se ainda não estiver iniciada
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// caminho até o seu conexao.php
+// caminho do conexao.php
 $pathConn = realpath('conexao.php');
 if (!$pathConn || !file_exists($pathConn)) {
     $possible_paths = [
@@ -36,7 +35,7 @@ if (!isset($conn)) {
     die('Erro: a variável de conexão ($conn) não foi definida em conexao.php');
 }
 
-// 3) Busca ID do usuário e avatar
+//  Busca ID do usuário e avatar
 $userId        = $_SESSION['usuario_id'] ?? null;
 $defaultAvatar = "curso/usuario/paginaPerfil/uploads/avatars/default-avatar.png";
 $avatarUrl     = $defaultAvatar;
@@ -78,12 +77,11 @@ function findLogoPath() {
     foreach ($possiblePaths as $path) {
         $fullPath = $currentDir . '/' . $path;
         if (file_exists($fullPath)) {
-            // Converte para caminho web relativo
             $webPath = str_replace($documentRoot, '', realpath($fullPath));
-            $webPath = str_replace('\\', '/', $webPath); // Windows compatibility
+            $webPath = str_replace('\\', '/', $webPath); 
             $webPath = ltrim($webPath, '/');
             
-            // Se começar com o domínio, remove
+           
             if (strpos($webPath, $_SERVER['HTTP_HOST']) !== false) {
                 $webPath = substr($webPath, strpos($webPath, $_SERVER['HTTP_HOST']) + strlen($_SERVER['HTTP_HOST']));
                 $webPath = ltrim($webPath, '/');
@@ -149,9 +147,9 @@ function findAvatarPath($avatarUrl, $basePath) {
         }
     }
     
-    // Se é um caminho personalizado
+    
     if (strpos($avatarUrl, 'http') === 0) {
-        return $avatarUrl; // URL completa
+        return $avatarUrl; 
     }
     
     return $basePath . $avatarUrl;
@@ -159,7 +157,7 @@ function findAvatarPath($avatarUrl, $basePath) {
 
 $avatarPath = findAvatarPath($avatarUrl, $basePath);
 
-// define os itens do header-nav
+
 $navItems = [
     ['href' => 'paginaInicial/paginaInicial.php',           'icon' => 'fa-home',         'text' => 'Home'],
     ['href' => 'paginaInicial/paginaInicial.php#sobre',     'icon' => 'fa-info-circle',  'text' => 'Sobre nós'],
@@ -167,7 +165,7 @@ $navItems = [
     ['href' => 'paginaInicial/paginaInicial.php#faleConosco','icon' => 'fa-envelope',     'text' => 'Contato'],
 ];
 
-//  itens do avatar dropdown
+
 $menuItems = [
     ['href' => 'curso/usuario/paginaPerfil/pgnUser.php', 'label' => '<i class="fas fa-user"></i> Perfil'],
     ['href' => 'notas.php',                             'label' => '<i class="fas fa-chart-bar"></i> Notas'],

@@ -25,13 +25,13 @@ if (isset($_POST['nome'], $_POST['email'], $_POST['senha'], $_POST['perfil'])) {
         if ($stmt->execute()) {
             $_SESSION['mensagem'] = 'Cadastro realizado com sucesso!';
 
-            // Se o cadastro foi de um usuário comum,, sempre manda ao login
+           
             if ($perfil === 'usuario' || $perfil === 'usuarioGeral') {
                 header('Location: form_login.php');
                 exit();
             }
 
-            // Caso contrário (instrutor ou adm), quem decidirá o destino é o ADM que está logado
+           
             if (isset($_SESSION['perfil']) && $_SESSION['perfil'] === 'adm') {
                 header('Location: adm/painel_adm.php');
                 exit();

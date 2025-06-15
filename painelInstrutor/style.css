@@ -1,17 +1,16 @@
 :root {
-    /* Cores principais */
     --primary: #6366f1;
     --primary-hover: #4f46e5;
     --primary-light: rgba(99, 102, 241, 0.1);
     --primary-dark: #3730a3;
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     
-    /* Cores secundárias */
+ 
     --secondary: #8b5cf6;
     --secondary-hover: #7c3aed;
     --secondary-light: rgba(139, 92, 246, 0.1);
     
-    /* Cores de status */
+   
     --success: #10b981;
     --success-light: rgba(16, 185, 129, 0.1);
     --warning: #f59e0b;
@@ -21,7 +20,7 @@
     --info: #3b82f6;
     --info-light: rgba(59, 130, 246, 0.1);
     
-    /* Gradientes */
+    
     --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --gradient-secondary: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
     --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -31,7 +30,7 @@
     --gradient-card: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
     --gradient-purple: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #8b5cf6 100%);
     
-    /* Cores neutras  */
+    
     --white: #ffffff;
     --gray-50: #f8fafc;
     --gray-100: #f1f5f9;
@@ -44,12 +43,12 @@
     --gray-800: #1e293b;
     --gray-900: #0f172a;
     
-    /* Cores de texto */
+  
     --text-primary: #0f172a;
     --text-secondary: #334155;
     --text-muted: #64748b;
     
-    /* Sombras  */
+  
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -59,7 +58,7 @@
     --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
     --shadow-purple: 0 0 30px rgba(139, 92, 246, 0.2);
     
-    /* Design tokens */
+  
     --border-radius: 12px;
     --border-radius-lg: 16px;
     --border-radius-xl: 20px;
@@ -67,7 +66,7 @@
     --transition-fast: all 0.15s ease-out;
     --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
-    /* Bordas */
+ 
     --border-light: 1px solid var(--gray-200);
     --border-medium: 2px solid var(--gray-300);
     --border-purple: 2px solid var(--primary);

@@ -5,7 +5,7 @@ if (!isset($_SESSION['perfil']) || $_SESSION['perfil']!=='adm') {
   header('Location: ../form_login.php'); exit;
 }
 
-// Buscar todos os cursos
+// pega os cursos do bd
 $cursos = $conexao->query("SELECT id, titulo, descricao FROM cursos ORDER BY titulo");
 
 // Verificar se o usuário clicou em um curso para ver os inscritos

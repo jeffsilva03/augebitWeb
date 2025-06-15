@@ -245,7 +245,7 @@
             border: 1px solid #e5e7eb;
         }
 
-        /* Adicionado: Debug box para desenvolvimento */
+    
         .debug-box {
             background: #fff3cd;
             border: 1px solid #ffeaa7;
@@ -270,7 +270,7 @@
             }
         }
 
-        /* Estilos adicionais para melhorar a experiência */
+       
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -294,7 +294,7 @@
             animation-delay: 0.2s;
         }
 
-        /* Responsive design para dispositivos móveis */
+        
         @media (max-width: 768px) {
             .evaluation-form {
                 padding: 20px 15px;
@@ -319,7 +319,7 @@
             }
         }
 
-        /* Estilos para impressão */
+        
         @media print {
             .submit-section,
             .progress-indicator,
@@ -333,7 +333,7 @@
             }
         }
 
-        /* Melhorias de acessibilidade */
+    
         .alternative:focus-within {
             outline: 2px solid #007bff;
             outline-offset: 2px;
@@ -344,7 +344,7 @@
             outline-offset: 2px;
         }
 
-        /* Loading state */
+      
         .loading {
             pointer-events: none;
             opacity: 0.6;
@@ -372,7 +372,7 @@
             100% { transform: rotate(360deg); }
         }
 
-         /* Estilos específicos para a avaliação */
+   
         .evaluation-form {
             background: #ffffff;
             border-radius: 12px;
@@ -530,7 +530,7 @@
             transition: width 0.3s ease;
         }
 
-        /* Estilos para Resultados da Avaliação */
+       
 .evaluation-result {
     margin-top: 30px;
 }

@@ -1,7 +1,7 @@
 <?php
 include '../../arquivosReuso/conexao.php';
 
-// Incluir cabeçalho
+
 require_once 'headerInstrutor.php';
 
 ?>
@@ -163,7 +163,6 @@ require_once 'headerInstrutor.php';
     
 
     <div class="container">
-        <!-- Seletor de Curso -->
         <div class="course-selector">
             <h2>Selecione o Curso</h2>
             <div class="row">
@@ -178,7 +177,7 @@ require_once 'headerInstrutor.php';
             </div>
         </div>
 
-        <!-- Formulário de Atividades -->
+      
         <div id="atividades-form" style="display: none;">
             <form id="form-config" enctype="multipart/form-data" method="POST" action="conexao.php">
                 <input type="hidden" id="curso_id_hidden" name="curso_id" value="">
@@ -195,7 +194,7 @@ require_once 'headerInstrutor.php';
                     </div>
                 </div>
 
-                <!-- Questões 1-10 -->
+               
                 <div class="form-section">
                     <div class="question-title">Questão 1</div>
                     <div class="row">
@@ -446,7 +445,6 @@ require_once 'headerInstrutor.php';
     </div>
 
     <script>
-        // Carregar cursos ao inicializar a página
         $(document).ready(function() {
             carregarCursos();
         });
@@ -470,7 +468,7 @@ require_once 'headerInstrutor.php';
             });
         }
 
-        // Mostrar formulário quando curso for selecionado
+    
         $('#curso-select').change(function() {
             const cursoId = $(this).val();
             if (cursoId) {
@@ -490,7 +488,6 @@ require_once 'headerInstrutor.php';
                 dataType: 'json',
                 success: function(data) {
                     if (data) {
-                        // Preencher os campos com os dados existentes
                         $('input[name="tituloAtiv"]').val(data.tituloAtiv || '');
                         for (let i = 1; i <= 10; i++) {
                             $(`input[name="questao${i}"]`).val(data[`questao${i}`] || '');
@@ -501,7 +498,7 @@ require_once 'headerInstrutor.php';
             });
         }
 
-        // Submit do formulário
+
         $("#form-config").submit(function(event) {
             event.preventDefault();
 

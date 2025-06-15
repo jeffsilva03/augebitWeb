@@ -19,7 +19,6 @@ if (session_status()===PHP_SESSION_NONE) session_start();
         </a></li>
       </ul>
     </nav>
-    <!-- Botão para recolher/expandir sidebar -->
     <div class="btn-toggle-sidebar" id="toggle-sidebar"></div>
   </aside>
 

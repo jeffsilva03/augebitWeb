@@ -13,7 +13,7 @@ if ($mysqli->connect_error) {
     die("Erro na conexão com o banco de dados: " . $mysqli->connect_error);
 }
 
-// Buscar cursos da tabela cursos
+
 $cursos = [];
 $sqlCursos = "SELECT id, titulo FROM cursos ORDER BY titulo";
 $resultCursos = $mysqli->query($sqlCursos);
@@ -23,7 +23,7 @@ if ($resultCursos) {
     }
 }
 
-// Buscar avaliações existentes para popular o select de edição
+
 $avaliacoes_existentes = [];
 $sqlAvaliacoesExistentes = "SELECT DISTINCT a.curso_id, c.titulo 
                            FROM avaliacao a 
@@ -36,11 +36,11 @@ if ($resultAvaliacoesExistentes) {
     }
 }
 
-// Variáveis para pré-preencher o formulário
+
 $curso_id_selecionado = '';
 $dados_existentes = [];
 
-// Se foi selecionado um curso para editar
+
 if (isset($_GET['curso_id']) && !empty($_GET['curso_id'])) {
     $curso_id_selecionado = (int)$_GET['curso_id'];
     $sqlBuscar = "SELECT * FROM avaliacao WHERE curso_id = ? LIMIT 1";
@@ -66,24 +66,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     $dados[] = $curso_id;
 
-    // Adiciona as perguntas, alternativas e respostas corretas
+
     for ($i = 1; $i <= 10; $i++) {
         $dados[] = $_POST["pergunta$i"] ?? '';
         $dados[] = $_POST["alternativaA$i"] ?? '';
         $dados[] = $_POST["alternativaB$i"] ?? '';
         $dados[] = $_POST["alternativaC$i"] ?? '';
         $dados[] = $_POST["alternativaD$i"] ?? '';
-        $dados[] = $_POST["resposta_correta$i"] ?? ''; // Nova linha para resposta correta
+        $dados[] = $_POST["resposta_correta$i"] ?? ''; 
     }
 
-    // Verifica se todos os dados estão presentes (agora são 61 campos: 1 curso_id + 60 campos das questões)
+  
     if (count($dados) !== 61) {
         echo "<div class='alert alert-danger'>Erro: número incorreto de dados recebidos. Esperado: 61, Recebido: " . count($dados) . "</div>";
         echo "<pre>"; print_r($dados); echo "</pre>";
         exit;
     }
 
-    // Verifica se já existe um registro para este curso
+   
     $checkSql = "SELECT id FROM avaliacao WHERE curso_id = ? LIMIT 1";
     $checkStmt = $mysqli->prepare($checkSql);
     $checkStmt->bind_param("i", $curso_id);
@@ -91,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $checkStmt->get_result();
 
     if ($result && $result->num_rows > 0) {
-        // Atualiza
         $sql = "UPDATE avaliacao SET 
             pergunta1 = ?, alternativaA1 = ?, alternativaB1 = ?, alternativaC1 = ?, alternativaD1 = ?, resposta_correta1 = ?,
             pergunta2 = ?, alternativaA2 = ?, alternativaB2 = ?, alternativaC2 = ?, alternativaD2 = ?, resposta_correta2 = ?,
@@ -110,16 +109,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die("Erro ao preparar a query: " . $mysqli->error);
         }
         
-        // Remove o curso_id do array de dados para o bind_param do UPDATE
-        $dadosUpdate = array_slice($dados, 1); // Remove o primeiro elemento (curso_id)
-        $dadosUpdate[] = $curso_id; // Adiciona o curso_id no final para o WHERE
-        $tipos = str_repeat('s', count($dadosUpdate) - 1) . 'i'; // Todos string exceto o último (curso_id) que é int
+        $dadosUpdate = array_slice($dados, 1); 
+        $dadosUpdate[] = $curso_id; 
+        $tipos = str_repeat('s', count($dadosUpdate) - 1) . 'i'; 
         $stmt->bind_param($tipos, ...$dadosUpdate);
         
         $operacao = "atualizada";
         
     } else {
-        // Insere novo registro
         $sql = "INSERT INTO avaliacao (
             curso_id,
             pergunta1, alternativaA1, alternativaB1, alternativaC1, alternativaD1, resposta_correta1,
@@ -139,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die("Erro ao preparar a query: " . $mysqli->error);
         }
         
-        $tipos = 'i' . str_repeat('s', 60); // Primeiro int (curso_id), resto string
+        $tipos = 'i' . str_repeat('s', 60); 
         $stmt->bind_param($tipos, ...$dados);
         
         $operacao = "cadastrada";
@@ -148,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($stmt->execute()) {
         echo "<div class='alert alert-success'>Avaliação $operacao com sucesso!</div>";
         
-        // Debug: Vamos verificar se os dados foram salvos corretamente
+        
         echo "<div class='alert alert-info'>Debug: Verificando dados salvos...</div>";
         $sqlVerificar = "SELECT * FROM avaliacao WHERE curso_id = ? LIMIT 1";
         $stmtVerificar = $mysqli->prepare($sqlVerificar);
@@ -160,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dadosSalvos = $resultVerificar->fetch_assoc();
             echo "<div class='alert alert-success'>✅ Dados salvos com sucesso! ID do registro: " . $dadosSalvos['id'] . "</div>";
             
-            // Mostrar algumas perguntas salvas para confirmar
+         
             echo "<div class='alert alert-info'>";
             echo "<strong>Primeira pergunta salva:</strong> " . htmlspecialchars($dadosSalvos['pergunta1']) . "<br>";
             echo "<strong>Resposta correta 1:</strong> " . htmlspecialchars($dadosSalvos['resposta_correta1']) . "<br>";
@@ -170,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         $stmtVerificar->close();
         
-        // Redireciona para evitar reenvio do formulário
+     
         echo "<script>
                 setTimeout(function(){ 
                     window.location.href = 'avaliacao.php?curso_id=" . $curso_id . "&success=1'; 
@@ -184,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $checkStmt->close();
 }
 
-// Buscar nome do curso para exibição
+
 $nome_curso_atual = '';
 if ($curso_id_selecionado > 0) {
     $sqlNomeCurso = "SELECT titulo FROM cursos WHERE id = ?";
@@ -232,10 +229,7 @@ include_once('headerInstrutor.php');
             </div>
             <?php endif; ?>
 
-            <!-- Debug: Mostrar informações da tabela -->
-           
             
-            <!-- Avaliações Existentes -->
             <?php if (!empty($avaliacoes_existentes)): ?>
             <div class="existing-evaluations">
                 <h5><i class="fas fa-list"></i> Avaliações Existentes</h5>
@@ -256,7 +250,6 @@ include_once('headerInstrutor.php');
     </div>
     
     <form method="POST" id="form-avaliacao">
-        <!-- Seletor de Curso -->
         <div class="course-selector">
             <h2><i class="fas fa-graduation-cap"></i> Selecione o Curso</h2>
             
@@ -433,19 +426,18 @@ include_once('headerInstrutor.php');
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 $(document).ready(function() {
-    // Adiciona confirmação antes de sair da página se houver dados não salvos
     let formChanged = false;
     
     $('#form-avaliacao input, #form-avaliacao textarea, #form-avaliacao select').on('change input', function() {
         formChanged = true;
     });
     
-    // Validação do formulário antes do envio
+ 
     $('#form-avaliacao').on('submit', function(e) {
         let isValid = true;
         let missingFields = [];
         
-        // Verificar se todas as perguntas têm resposta correta selecionada
+       
         for (let i = 1; i <= 10; i++) {
             const pergunta = $(`textarea[name="pergunta${i}"]`).val().trim();
             const alternativaA = $(`input[name="alternativaA${i}"]`).val().trim();
@@ -496,7 +488,6 @@ $(document).ready(function() {
             }
             
             if (!respostaCorreta) {
-                // Destacar a seção de resposta correta
                 $(`input[name="resposta_correta${i}"]`).closest('.correct-answer-section').css('border-color', '#dc3545');
                 missingFields.push(`Resposta correta da questão ${i}`);
                 isValid = false;
@@ -509,7 +500,7 @@ $(document).ready(function() {
             e.preventDefault();
             alert('Por favor, preencha todos os campos obrigatórios:\n\n' + missingFields.join('\n'));
             
-            // Rolar para o primeiro campo com erro
+           
             const firstError = $('.validation-error').first();
             if (firstError.length) {
                 $('html, body').animate({
@@ -523,12 +514,12 @@ $(document).ready(function() {
         
         formChanged = false;
         
-        // Adicionar loading no botão
+       
         const btn = $(this).find('button[type="submit"]');
         const originalText = btn.html();
         btn.html('<i class="fas fa-spinner fa-spin"></i> Salvando...').prop('disabled', true);
         
-        // Restaurar botão após 3 segundos (caso não redirecione)
+        
         setTimeout(function() {
             btn.html(originalText).prop('disabled', false);
         }, 3000);
@@ -540,13 +531,13 @@ $(document).ready(function() {
         }
     });
     
-    // Auto-resize para textareas
+    
     $('textarea').on('input', function() {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
     });
     
-    // Contador de caracteres para perguntas
+    
     $('textarea[name*="pergunta"]').each(function() {
         const maxLength = 500;
         const textarea = $(this);
@@ -567,22 +558,22 @@ $(document).ready(function() {
         updateCounter();
     });
     
-    // Destacar alternativas quando a resposta correta é selecionada
+    
     $('input[name*="resposta_correta"]').on('change', function() {
         const questionNumber = this.name.match(/\d+/)[0];
         const selectedAnswer = this.value;
         
-        // Remover destaque de todas as alternativas desta questão
+        
         $(`input[name*="alternativa"][name*="${questionNumber}"]`).removeClass('correct-answer-highlight');
         
-        // Destacar a alternativa selecionada como correta
+        
         $(`input[name="alternativa${selectedAnswer}${questionNumber}"]`).addClass('correct-answer-highlight');
         
-        // Remover erro visual da seção de resposta correta
+       
         $(this).closest('.correct-answer-section').css('border-color', '#28a745');
     });
     
-    // Validação em tempo real
+    
     $('input[required], textarea[required]').on('blur', function() {
         if ($(this).val().trim() === '') {
             $(this).addClass('validation-error');
@@ -591,7 +582,7 @@ $(document).ready(function() {
         }
     });
     
-    // Melhorar UX dos radio buttons
+   
     $('.answer-option').on('click', function() {
         const radio = $(this).find('input[type="radio"]');
         if (!radio.prop('checked')) {
@@ -599,7 +590,7 @@ $(document).ready(function() {
         }
     });
     
-    // Adicionar efeito visual quando hover nos radio buttons
+   
     $('.answer-option').on('mouseenter', function() {
         $(this).css('background-color', 'rgba(40, 167, 69, 0.1)');
     }).on('mouseleave', function() {
@@ -608,14 +599,14 @@ $(document).ready(function() {
         }
     });
     
-    // Destacar opção selecionada
+    
     $('input[name*="resposta_correta"]').on('change', function() {
         const container = $(this).closest('.correct-answer-section');
         container.find('.answer-option').css('background-color', '');
         $(this).closest('.answer-option').css('background-color', 'rgba(40, 167, 69, 0.15)');
     });
     
-    // Aplicar destaque inicial para respostas já selecionadas
+   
     $('input[name*="resposta_correta"]:checked').each(function() {
         $(this).closest('.answer-option').css('background-color', 'rgba(40, 167, 69, 0.15)');
     });

@@ -220,10 +220,6 @@ $cursosAtivos = intval($totalCursos * 0.75);
     
     <div class="dashboard-footer">
       <p>Última atualização: <strong><?= date('d/m/Y H:i') ?></strong></p>
-      <button class="btn-primary">
-        <i data-lucide="refresh-cw" class="icon-btn"></i>
-        Atualizar dados
-      </button>
     </div>
   </main>
 

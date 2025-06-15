@@ -1,19 +1,17 @@
 <?php
 session_start();
-// Verificar se usuário está logado e é usuarioGeral
 if (!isset($_SESSION['usuario_id']) || $_SESSION['perfil'] !== 'usuarioGeral') {
     header('Location: ../../registro/form_login.php');
     exit();
 }
 
 $pagamento = $_SESSION['pagamento_sucesso'];
-unset($_SESSION['pagamento_sucesso']); // Limpar da sessão
+unset($_SESSION['pagamento_sucesso']); 
 include_once '../../arquivosReuso/header.php';
 ?>
 <link rel="stylesheet" href="pagamento-sucesso.css">
 
 <div class="success-container">
-    <!-- Confetti Animation -->
     <div class="confetti"></div>
     <div class="confetti"></div>
     <div class="confetti"></div>
@@ -78,16 +76,14 @@ include_once '../../arquivosReuso/header.php';
 </div>
 
 <script>
-// Auto-redirect para o curso após 10 segundos (opcional)
 setTimeout(function() {
     if (confirm('Deseja ser redirecionado automaticamente para o curso?')) {
         window.location.href = '<?php echo $pagamento['curso_url']; ?>';
     }
 }, 10000);
 
-// Adicionar efeito de confetti mais dinâmico
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Criar mais confetti dinamicamente
     const container = document.querySelector('.success-container');
     for (let i = 0; i < 20; i++) {
         const confetti = document.createElement('div');
@@ -101,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         container.appendChild(confetti);
         
-        // Remover confetti após a animação
+      
         setTimeout(() => {
             if (confetti.parentNode) {
                 confetti.parentNode.removeChild(confetti);

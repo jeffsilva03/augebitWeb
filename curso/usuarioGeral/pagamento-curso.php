@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['perfil'] !== 'usuarioGeral') {
     exit();
 }
 
-// Verificar se foi passado o ID do curso
+
 if (!isset($_GET['curso_id'])) {
     header('Location: ../../listaCursos/listagemCursos.php');
     exit();
@@ -16,7 +16,7 @@ if (!isset($_GET['curso_id'])) {
 
 $curso_id = (int)$_GET['curso_id'];
 
-// Buscar informações do curso
+// Buscar infos do curso
 $sql = "SELECT c.*, ca.nome as instrutor_nome 
         FROM cursos c 
         INNER JOIN cadastro ca ON c.instrutor_id = ca.id 
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function addCardMasks() {
-        // Máscara para número do cartão
+        // Máscara igual ao que o processor Marcelo passou para o telefone
         const cardNumber = paymentForm.querySelector('input[placeholder="0000 0000 0000 0000"]');
         if (cardNumber) {
             cardNumber.addEventListener('input', function(e) {
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // Máscara para validade
+      
         const expiry = paymentForm.querySelector('input[placeholder="MM/AA"]');
         if (expiry) {
             expiry.addEventListener('input', function(e) {
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar com cartão de crédito
     addCardMasks();
     
-    // Validação do formulário
+    
     document.getElementById('confirmPaymentForm').addEventListener('submit', function(e) {
         const selectedMethod = document.querySelector('.method-card.selected').dataset.method;
         
@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Mostrar loading
+       
         const button = e.target.querySelector('.payment-button');
         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando pagamento...';
         button.disabled = true;

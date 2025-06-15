@@ -1,9 +1,8 @@
 <?php
-// processar-pagamento.php - Versão corrigida
 session_start();
-require_once '../../arquivosReuso/conexao.php'; // Ajustar caminho conforme sua estrutura
+require_once '../../arquivosReuso/conexao.php';  
 
-// Verificar se usuário está logado e é usuarioGeral
+
 if (!isset($_SESSION['usuario_id']) || $_SESSION['perfil'] !== 'usuarioGeral') {
     header('Location: ../../registro/form_login.php');
     exit();
@@ -55,7 +54,7 @@ if ($result_check->num_rows > 0) {
 // Simular processamento de pagamento (sempre será aprovado)
 sleep(2); // Simular delay do processamento
 
-// Inserir inscrição na base de dados
+// Inserir inscrição no bd
 $sql_inscricao = "INSERT INTO inscricoes (usuario_id, curso_id, inscrito_em) VALUES (?, ?, NOW())";
 $stmt_inscricao = $conn->prepare($sql_inscricao);
 $stmt_inscricao->bind_param('ii', $usuario_id, $curso_id);

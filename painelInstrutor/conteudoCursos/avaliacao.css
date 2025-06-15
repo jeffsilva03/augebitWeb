@@ -1,4 +1,3 @@
-/* ===== RESET E CONFIGURAÇÕES GLOBAIS ===== */
 * {
     margin: 0;
     padding: 0;
@@ -6,19 +5,18 @@
 }
 
 :root {
-    /* Paleta de cores principal */
     --primary-purple: #8B5FBF;
     --primary-purple-light: #A376D8;
     --primary-purple-dark: #6B4C93;
     --primary-purple-gradient: linear-gradient(135deg, #8B5FBF 0%, #A376D8 100%);
     
-    /* Cores de apoio */
+  
     --light-purple: #F5F1FF;
     --lighter-purple: #FDFCFF;
     --purple-shadow: rgba(139, 95, 191, 0.15);
     --purple-glow: rgba(139, 95, 191, 0.3);
     
-    /* Cores neutras */
+  
     --white: #FFFFFF;
     --light-gray: #F8F9FA;
     --medium-gray: #E9ECEF;
@@ -26,24 +24,24 @@
     --dark-gray: #495057;
     --border-color: #DEE2E6;
     
-    /* Cores de status */
+ 
     --success: #10B981;
     --warning: #F59E0B;
     --error: #EF4444;
     --info: #3B82F6;
     
-    /* Sombras */
+ 
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
     
-    /* Transições */
+
     --transition-fast: 0.15s ease-in-out;
     --transition-normal: 0.3s ease-in-out;
     --transition-slow: 0.5s ease-in-out;
     
-    /* Bordas */
+
     --border-radius-sm: 8px;
     --border-radius-md: 12px;
     --border-radius-lg: 16px;
@@ -59,14 +57,14 @@ body {
     overflow-x: hidden;
 }
 
-/* ===== CONTAINER E LAYOUT ===== */
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem 1rem;
 }
 
-/* ===== CABEÇALHO ===== */
+
 h1 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -95,7 +93,7 @@ h1 i {
     font-size: 2.2rem;
 }
 
-/* ===== ALERTAS ===== */
+
 .alert {
     border: none;
     border-radius: var(--border-radius-md);
@@ -140,7 +138,7 @@ h1 i {
     font-size: 1.1rem;
 }
 
-/* ===== AVALIAÇÕES EXISTENTES ===== */
+
 .existing-evaluations {
     background: var(--white);
     padding: 2rem;
@@ -222,7 +220,7 @@ h1 i {
     z-index: 1;
 }
 
-/* ===== SELETOR DE CURSO ===== */
+
 .course-selector {
     background: var(--white);
     padding: 2.5rem;
@@ -259,7 +257,7 @@ h1 i {
     font-size: 1.6rem;
 }
 
-/* ===== FORMULÁRIO ===== */
+
 .form-section {
     background: var(--white);
     padding: 2.5rem;
@@ -313,7 +311,7 @@ h1 i {
     box-shadow: var(--shadow-md);
 }
 
-/* ===== CAMPOS DE FORMULÁRIO ===== */
+
 .form-label {
     font-weight: 600;
     color: var(--dark-gray);
@@ -378,7 +376,7 @@ select.form-control {
     padding-right: 3rem;
 }
 
-/* ===== SEÇÃO DE RESPOSTA CORRETA ===== */
+
 .correct-answer-section {
     background: linear-gradient(135deg, var(--light-purple) 0%, var(--lighter-purple) 100%);
     padding: 2rem;
@@ -486,7 +484,7 @@ select.form-control {
     box-shadow: 0 0 0 4px var(--purple-glow);
 }
 
-/* ===== BOTÕES ===== */
+
 .btn {
     font-family: inherit;
     font-weight: 600;
@@ -558,7 +556,6 @@ select.form-control {
     transform: none !important;
 }
 
-/* ===== UTILITÁRIOS ===== */
 .d-flex {
     display: flex;
 }
@@ -605,7 +602,7 @@ select.form-control {
     display: block;
 }
 
-/* ===== VALIDAÇÃO E FEEDBACK ===== */
+
 .validation-error {
     border-color: var(--error) !important;
     box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2) !important;
@@ -629,7 +626,7 @@ select.form-control {
     font-weight: 600;
 }
 
-/* ===== ANIMAÇÕES ===== */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -662,7 +659,6 @@ select.form-control {
     animation: pulse 0.6s ease-in-out;
 }
 
-/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .container {
         padding: 1rem 0.5rem;
@@ -737,7 +733,6 @@ select.form-control {
     }
 }
 
-/* ===== ESTADOS DE LOADING ===== */
 .btn .fa-spinner {
     animation: spin 1s linear infinite;
 }
@@ -747,7 +742,6 @@ select.form-control {
     100% { transform: rotate(360deg); }
 }
 
-/* ===== MELHORIAS DE ACESSIBILIDADE ===== */
 .form-control:focus,
 .btn:focus,
 .answer-option:focus-within {
@@ -755,7 +749,7 @@ select.form-control {
     outline-offset: 2px;
 }
 
-/* ===== SCROLLBAR PERSONALIZADA ===== */
+
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -774,7 +768,7 @@ select.form-control {
     background: var(--primary-purple-dark);
 }
 
-/* ===== EFEITOS ESPECIAIS ===== */
+
 .form-section::before {
     content: '';
     position: absolute;

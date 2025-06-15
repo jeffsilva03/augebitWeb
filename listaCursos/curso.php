@@ -1,14 +1,13 @@
 <?php
-// curso.php - Versão corrigida com suporte completo a vídeos do YouTube/Vimeo
 session_start();
 
-// Verificar se o usuário está logado
+
 if (!isset($_SESSION['usuario_id'], $_SESSION['perfil'])) {
     header('Location: ../login/form_login.php');
     exit;
 }
 
-// Incluir conexão
+
 require_once '../arquivosReuso/conexao.php';
 
 // Pegar ID do curso da URL
@@ -40,7 +39,7 @@ function convertToEmbedUrl($url) {
         return $url;
     }
     
-    // Para outros tipos de vídeo (MP4, etc.)
+    // Para outros tipos de vídeo 
     return $url;
 }
 
@@ -193,7 +192,7 @@ if ($resultCurso->num_rows == 0) {
 
 $curso = $resultCurso->fetch_assoc();
 
-// CONTROLE DE ACESSO - VERIFICAR SE O USUÁRIO PODE ACESSAR O CURSO
+
 $tem_acesso = false;
 $precisa_pagar = false;
 $ja_inscrito = false;
@@ -206,12 +205,12 @@ switch($_SESSION['perfil']) {
         break;
         
     case 'instrutor':
-        // Instrutor pode acessar todos os cursos (ou implementar lógica específica)
+        // Instrutor pode acessar todos os cursos 
         $tem_acesso = true;
         break;
         
     case 'usuario':
-        // Usuário premium tem acesso gratuito
+        // Usuário de empresa tem acesso gratuito
         $tem_acesso = true;
         break;
         
@@ -227,7 +226,6 @@ switch($_SESSION['perfil']) {
             $result_inscricao = $stmt_inscricao->get_result();
             
             if ($result_inscricao->num_rows > 0) {
-                // Usuário já está inscrito (já pagou)
                 $tem_acesso = true;
                 $ja_inscrito = true;
                 $inscricao_data = $result_inscricao->fetch_assoc();
@@ -248,7 +246,6 @@ switch($_SESSION['perfil']) {
 
 // Se o usuário não tem acesso e precisa pagar, redirecionar para página de pagamento
 if (!$tem_acesso && $precisa_pagar) {
-    // Ajustar o caminho conforme sua estrutura de pastas
     header('Location: ../curso/usuarioGeral/pagamento-curso.php?curso_id=' . $curso_id);
     exit;
 }
@@ -258,16 +255,14 @@ if (!$tem_acesso) {
     die("Acesso negado. Você não tem permissão para acessar este curso.");
 }
 
-// Verificar se há mensagem de sucesso do pagamento
+
 $pagamento_recente = false;
 if (isset($_SESSION['pagamento_sucesso']) && $_SESSION['pagamento_sucesso']['curso_id'] == $curso_id) {
     $pagamento_recente = true;
-    // Limpar a mensagem após exibir
     unset($_SESSION['pagamento_sucesso']);
 }
 
-// Se chegou até aqui, o usuário tem acesso ao curso
-// Continuar com o código normal para buscar dados do curso
+
 
 // Buscar atividades do curso
 $sqlAtividades = "SELECT * FROM atividades WHERE curso_id = ?";
@@ -282,7 +277,7 @@ if ($stmtAtividades) {
     }
 }
 
-// Buscar aulas do curso - CONSULTA CORRIGIDA
+// Buscar aulas do curso 
 $sqlAulas = "SELECT * FROM aula WHERE curso_id = ? ORDER BY id ASC";
 $stmtAulas = $conn->prepare($sqlAulas);
 $aulas = [];
@@ -358,7 +353,6 @@ require_once '../arquivosReuso/header.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="curso.css">
     <style>
-        /* Estilos específicos para vídeos */
         .video-container {
             background: white;
             border-radius: 12px;
@@ -379,7 +373,7 @@ require_once '../arquivosReuso/header.php';
             position: relative;
             width: 100%;
             height: 0;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%; 
             overflow: hidden;
             border-radius: 8px;
             background: #000;
@@ -438,13 +432,12 @@ require_once '../arquivosReuso/header.php';
 
 <body>
     <div class="container">
-        <!-- Botão Voltar -->
         <a href="listagemCursos.php" class="back-button">
             <i class="fas fa-arrow-left"></i>
             Voltar para Cursos
         </a>
 
-        <!-- Mensagem de Sucesso do Pagamento -->
+       
         <?php if ($pagamento_recente): ?>
         <div class="success-alert">
             <h3><i class="fas fa-check-circle"></i> Pagamento Confirmado!</h3>
@@ -452,7 +445,7 @@ require_once '../arquivosReuso/header.php';
         </div>
         <?php endif; ?>
 
-        <!-- Badge de Acesso -->
+      
         <?php
         $badge_class = '';
         $badge_text = '';
@@ -498,7 +491,7 @@ require_once '../arquivosReuso/header.php';
             <?php endif; ?>
         </div>
 
-        <!-- Cabeçalho do Curso -->
+        
         <div class="course-header">
             <h1 class="course-title"><?php echo htmlspecialchars($curso['titulo']); ?></h1>
             <p><?php echo htmlspecialchars($curso['descricao'] ?? ''); ?></p>
@@ -523,7 +516,7 @@ require_once '../arquivosReuso/header.php';
             </div>
         </div>
 
-        <!-- Objetivos do Curso -->
+      
         <?php if (!empty($objetivos)): ?>
         <div class="content-section">
             <h2 class="section-title"><i class="fas fa-bullseye"></i> Objetivos do Curso</h2>
@@ -545,14 +538,13 @@ require_once '../arquivosReuso/header.php';
         </div>
         <?php endif; ?>
 
-        <!-- Aulas - SEÇÃO CORRIGIDA -->
+       
         <?php if (!empty($aulas)): ?>
         <div class="content-section">
             <h2 class="section-title"><i class="fas fa-play-circle"></i> Aulas do Curso</h2>
             <?php 
             $aulas_com_video = 0;
             foreach ($aulas as $index => $aula): 
-                // Verificar se existe vídeo na aula
                 $video_url = '';
                 if (!empty($aula['videoAula']) && $aula['videoAula'] !== '0') {
                     $video_url = $aula['videoAula'];
@@ -602,7 +594,7 @@ require_once '../arquivosReuso/header.php';
                 endif;
             endforeach; 
             
-            // Se não há aulas com vídeo, mostrar mensagem
+            
             if ($aulas_com_video === 0):
             ?>
             <div class="no-videos-message">
@@ -625,12 +617,11 @@ require_once '../arquivosReuso/header.php';
 
         
 
-        <!-- Avaliações - SEÇÃO INTERATIVA -->
         <?php if (!empty($avaliacoes)): ?>
         <div class="content-section">
             <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Avaliação do Curso</h2>
             
-            <!-- Mensagem de resultado -->
+          
             <?php if (!empty($mensagem_avaliacao)): ?>
                 <?php 
                 $msg_parts = explode('|', $mensagem_avaliacao);
@@ -714,7 +705,7 @@ require_once '../arquivosReuso/header.php';
     </div>
 
 
-    <!-- Seção de Resultados da Avaliação -->
+   
 <?php if ($nota_anterior !== null): ?>
 <div class="content-section evaluation-result">
     <h2 class="section-title">
@@ -734,7 +725,7 @@ require_once '../arquivosReuso/header.php';
             </div>
         </div>
         
-        <!-- Gabarito Detalhado -->
+     
         <div class="detailed-answers">
             <h4>Gabarito Detalhado:</h4>
             <?php 
@@ -766,12 +757,10 @@ require_once '../arquivosReuso/header.php';
 
 
     <script>
-        // JavaScript para funcionalidade da avaliação
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar progresso
             updateProgress();
             
-            // Adicionar event listeners para todas as alternativas
+           
             const alternatives = document.querySelectorAll('.alternative');
             alternatives.forEach(alt => {
                 alt.addEventListener('click', function() {
@@ -780,18 +769,18 @@ require_once '../arquivosReuso/header.php';
                         radio.checked = true;
                         updateProgress();
                         
-                        // Remover seleção anterior da mesma questão
+                       
                         const questionCard = this.closest('.question-card');
                         const allAlts = questionCard.querySelectorAll('.alternative');
                         allAlts.forEach(a => a.classList.remove('selected'));
                         
-                        // Adicionar classe selected
+                        
                         this.classList.add('selected');
                     }
                 });
             });
             
-            // Marcar alternativas já selecionadas
+            
             const selectedRadios = document.querySelectorAll('input[type="radio"]:checked');
             selectedRadios.forEach(radio => {
                 radio.closest('.alternative').classList.add('selected');
@@ -803,7 +792,7 @@ require_once '../arquivosReuso/header.php';
             const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
             const progressPercent = (answeredQuestions / totalQuestions) * 100;
             
-            // Atualizar barra de progresso
+         
             const progressFill = document.getElementById('progress-fill');
             const progressText = document.getElementById('progress-text');
             const submitBtn = document.getElementById('submit-btn');
@@ -816,7 +805,7 @@ require_once '../arquivosReuso/header.php';
                 progressText.textContent = `${answeredQuestions} de ${totalQuestions} questões respondidas`;
             }
             
-            // Habilitar/desabilitar botão de envio
+      
             if (submitBtn) {
                 if (answeredQuestions === totalQuestions) {
                     submitBtn.disabled = false;
@@ -828,7 +817,7 @@ require_once '../arquivosReuso/header.php';
             }
         }
 
-        // Confirmação antes de enviar
+        
         document.getElementById('evaluation-form').addEventListener('submit', function(e) {
             const totalQuestions = <?php echo $questoes_count; ?>;
             const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
@@ -845,7 +834,7 @@ require_once '../arquivosReuso/header.php';
             }
         });
 
-        // Smooth scroll para seções
+        
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -859,7 +848,7 @@ require_once '../arquivosReuso/header.php';
             });
         });
 
-        // Auto-save das respostas no localStorage (opcional - para não perder progresso)
+       
         function saveProgress() {
             const formData = new FormData(document.getElementById('evaluation-form'));
             const responses = {};
@@ -873,7 +862,7 @@ require_once '../arquivosReuso/header.php';
             localStorage.setItem('evaluation_progress_<?php echo $curso_id; ?>', JSON.stringify(responses));
         }
 
-        // Carregar progresso salvo (opcional)
+
         function loadProgress() {
             const saved = localStorage.getItem('evaluation_progress_<?php echo $curso_id; ?>');
             if (saved) {
@@ -893,24 +882,23 @@ require_once '../arquivosReuso/header.php';
             }
         }
 
-        // Salvar progresso quando uma resposta for selecionada
+      
         document.addEventListener('change', function(e) {
             if (e.target.type === 'radio' && e.target.name.startsWith('resposta[')) {
                 saveProgress();
             }
         });
 
-        // Limpar progresso salvo após envio bem-sucedido
+    
         <?php if (!empty($mensagem_avaliacao) && strpos($mensagem_avaliacao, 'success') === 0): ?>
         localStorage.removeItem('evaluation_progress_<?php echo $curso_id; ?>');
         <?php endif; ?>
 
-        // Carregar progresso ao inicializar (se não houver respostas anteriores do banco)
+        
         <?php if (empty($respostas_anteriores)): ?>
-        // loadProgress(); // Descomente se quiser usar o auto-save
         <?php endif; ?>
 
-        // Adicionar indicador de tempo (opcional)
+       
         let startTime = new Date().getTime();
         
         window.addEventListener('beforeunload', function() {
@@ -919,9 +907,8 @@ require_once '../arquivosReuso/header.php';
             console.log(`Tempo gasto na avaliação: ${timeSpent} segundos`);
         });
 
-        // Adicionar efeitos visuais
+        
         function addVisualEffects() {
-            // Animação de entrada para as questões
             const questions = document.querySelectorAll('.question-card');
             questions.forEach((question, index) => {
                 question.style.opacity = '0';
@@ -935,10 +922,10 @@ require_once '../arquivosReuso/header.php';
             });
         }
 
-        // Inicializar efeitos visuais
+       
         addVisualEffects();
 
-        // Função para destacar questões não respondidas
+        
         function highlightUnanswered() {
             const questions = document.querySelectorAll('.question-card');
             questions.forEach(question => {
@@ -955,17 +942,17 @@ require_once '../arquivosReuso/header.php';
             });
         }
 
-        // Aplicar destaque após mudanças
+       
         document.addEventListener('change', function(e) {
             if (e.target.type === 'radio') {
                 setTimeout(highlightUnanswered, 100);
             }
         });
 
-        // Aplicar destaque inicial
+        
         setTimeout(highlightUnanswered, 500);
 
-        // Scroll para resultado após envio
+        
 <?php if (!empty($mensagem_avaliacao) && strpos($mensagem_avaliacao, 'success') === 0): ?>
 setTimeout(function() {
     const resultSection = document.querySelector('.evaluation-result');
@@ -983,7 +970,6 @@ setTimeout(function() {
 </html>
 
 <?php
-// Fechar conexões
 if (isset($stmtCurso)) $stmtCurso->close();
 if (isset($stmtAtividades)) $stmtAtividades->close();
 if (isset($stmtAulas)) $stmtAulas->close();

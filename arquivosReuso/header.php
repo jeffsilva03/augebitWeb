@@ -71,7 +71,7 @@ function findLogoPath() {
         '../src/logo.png',       
         '../../src/logo.png',    
         '../../../src/logo.png', 
-        '../../../../src/logo.png', // Pasta src quatro pastas acima
+        '../../../../src/logo.png', 
         '../../../../../src/logo.png' 
     ];
     
@@ -169,8 +169,8 @@ $navItems = [
 
 $menuItems = [
     ['href' => 'curso/usuario/paginaPerfil/pgnUser.php', 'label' => '<i class="fas fa-user"></i> Perfil'],
-    ['href' => 'notas.php',                             'label' => '<i class="fas fa-chart-bar"></i> Notas'],
-    ['href' => 'certificado/cert.php',                  'label' => '<i class="fas fa-file-alt"></i> Relatórios'],
+    ['href' => 'listaCursos/listagemCursos.php',                             'label' => '<i class="fas fa-chart-bar"></i> Meus Cursos'],
+    ['href' => 'certificado/cert.php',                  'label' => '<i class="fas fa-file-alt"></i> Certificados'],
     ['divider' => true],
     ['href' => 'registro/logout.php',                   'label' => '<i class="fas fa-sign-out-alt"></i> Sair'],
 ];

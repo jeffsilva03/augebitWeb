@@ -9,15 +9,16 @@ if (!isset($_SESSION['usuario_id'])) {
 
 
 
-// Definir o diretório para uploads de imagens - caminho absoluto para garantir consistência
+// Definir a pasta para guardar os avatar
 $upload_dir = dirname(__FILE__) . "/uploads/avatars/";
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0777, true);
 }
-// Caminho relativo para armazenar no banco de dados e exibir na página
+
+
 $upload_dir_rel = "uploads/avatars/";
 
-// Buscar o caminho correto para o arquivo de conexão
+// caminhos do conexao
 $possible_paths = [
     '../../../conexaoBD/conexao.php',
     '../../../../conexaoBD/conexao.php',
@@ -37,15 +38,15 @@ if (!$connection_found) {
     die("Erro: não foi possível encontrar o arquivo de conexão.");
 }
 
-// Normalizar o nome da variável de conexão
+
 if (!isset($conn) && isset($conexao)) {
     $conn = $conexao;
 }
 
-// Pegar o ID do usuário da sessão
+
 $usuario_id = $_SESSION['usuario_id'];
 
-// Variáveis para mensagens
+
 $upload_error = null;
 $upload_success = null;
 
@@ -55,7 +56,7 @@ if (isset($_POST['submit_photo'])) {
         $file_extension = strtolower(pathinfo($_FILES["avatar"]["name"], PATHINFO_EXTENSION));
         $new_filename = "user_" . $usuario_id . "_" . time() . "." . $file_extension;
         $target_file = $upload_dir . $new_filename;
-        $db_file_path = $upload_dir_rel . $new_filename; // Caminho relativo para armazenar no BD
+        $db_file_path = $upload_dir_rel . $new_filename; 
         
         // Verificar se o arquivo é uma imagem
         $check = getimagesize($_FILES["avatar"]["tmp_name"]);
@@ -68,7 +69,6 @@ if (isset($_POST['submit_photo'])) {
                 if ($file_extension != "jpg" && $file_extension != "jpeg" && $file_extension != "png") {
                     $upload_error = "Apenas arquivos JPG, JPEG e PNG são permitidos.";
                 } else {
-                    // Tudo ok, tenta fazer o upload
                     if (move_uploaded_file($_FILES["avatar"]["tmp_name"], $target_file)) {
                         // Atualizar caminho da foto no banco de dados
                         $sql = "UPDATE cadastro SET avatar = ? WHERE id = ?";
@@ -91,7 +91,7 @@ if (isset($_POST['submit_photo'])) {
         } else {
             $upload_error = "O arquivo não é uma imagem válida.";
         }
-    } else if ($_FILES["avatar"]["error"] != 4) { // 4 = UPLOAD_ERR_NO_FILE
+    } else if ($_FILES["avatar"]["error"] != 4) { 
         $upload_error = "Erro no upload do arquivo.";
     } else {
         $upload_error = "Nenhum arquivo selecionado.";
@@ -114,7 +114,7 @@ if ($result->num_rows > 0) {
 }
 $stmt->close();
 
-// Obter informações do curso, se aplicável
+
 $curso = null;
 $sql_curso = "SELECT c.titulo, c.descricao, i.inscrito_em 
               FROM inscricoes i 
@@ -131,14 +131,13 @@ if ($result_curso->num_rows > 0) {
 }
 $stmt_curso->close();
 
-// Definir o caminho para o avatar
+
 $default_avatar = "assets/images/default-avatar.png";
 
 // Verificar se o usuário tem avatar no banco de dados
 if (!empty($usuario['avatar']) && file_exists($usuario['avatar'])) {
     $avatar_path = $usuario['avatar'];
 } elseif (!empty($usuario['avatar'])) {
-    // Se o caminho existe no BD mas o arquivo não, tenta com caminho relativo
     if (file_exists(dirname(__FILE__) . '/' . $usuario['avatar'])) {
         $avatar_path = $usuario['avatar'];
     } else {
@@ -396,7 +395,6 @@ if (!empty($usuario['avatar']) && file_exists($usuario['avatar'])) {
 <body>
 
 <?php
-// Incluir o header da página
 require_once '../../../arquivosReuso/header.php';
 ?>
 
@@ -521,22 +519,18 @@ require_once '../../../arquivosReuso/header.php';
         <?php if(isset($upload_success)): ?>
         setTimeout(function() {
             closePhotoModal();
-            // Não recarregamos a página automaticamente - o usuário terá que recarregar manualmente
-            // para ver a nova imagem ou podemos atualizar a imagem via JavaScript
             updateAvatarImage('<?= htmlspecialchars($avatar_path) ?>');
         }, 3000);
         <?php endif; ?>
         
-        // Função para atualizar a imagem do avatar sem recarregar a página
+       
         function updateAvatarImage(newSrc) {
-            // Adiciona um parâmetro de consulta aleatório para evitar o cache do navegador
             var timestamp = new Date().getTime();
             document.querySelector('.profile-avatar').src = newSrc + '?t=' + timestamp;
         }
     </script>
     
     <?php
-    // Fechar conexão com o banco de dados após terminar de usar
     if (isset($conn) && $conn) {
         $conn->close();
     }

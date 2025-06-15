@@ -1,5 +1,4 @@
 <?php
-// adm/editar_usuario.php
 session_start();
 require '../conexaoBD/conexao.php';
 if (!isset($_SESSION['perfil']) || $_SESSION['perfil'] !== 'adm') {
@@ -13,7 +12,7 @@ if (!$id) {
     exit();
 }
 
-// Busca dados atuais
+
 $stmt = $conexao->prepare("SELECT nome, email, perfil FROM cadastro WHERE id = ?");
 $stmt->bind_param('i', $id);
 $stmt->execute();
@@ -21,7 +20,7 @@ $stmt->bind_result($nome, $email, $perfil_atual);
 $stmt->fetch();
 $stmt->close();
 
-// Processa atualização
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $novo_nome   = trim($_POST['nome']);
     $novo_email  = trim($_POST['email']);
@@ -262,14 +261,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       background-color: rgba(138, 43, 226, 0.05);
     }
     
-    /* Form grid for responsive layout */
+    
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
     }
     
-    /* Status messages */
+  
     .form-status {
       padding: 1rem;
       border-radius: var(--radius);
@@ -291,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       border-left: 4px solid #ec4e56;
     }
     
-    /* Animations */
+
     .animar-fadein {
       animation: fadeIn 0.5s ease forwards;
     }
@@ -323,7 +322,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
     
-    /* Custom password strength indicator */
+
     .password-strength {
       height: 5px;
       width: 100%;
@@ -414,7 +413,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </main>
   
   <script>
-    // Script para indicador de força de senha (puramente visual)
     document.addEventListener('DOMContentLoaded', function() {
       const passwordInput = document.getElementById('senha');
       const passwordBar = document.getElementById('password-bar');

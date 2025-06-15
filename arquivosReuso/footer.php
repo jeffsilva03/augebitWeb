@@ -68,7 +68,7 @@
     width: 100%;
   }
 
-  /* Ícones em linha separada */
+  
   .social-icons {
     list-style: none;
     padding: 0;
@@ -126,14 +126,14 @@
     <li><a href="#">Contato</a></li>
   </ul>
 
-  <!-- Ícones sociais  -->
+  <!-- Ícones  -->
   <ul class="social-icons">
     <li><a href="#"><i class="fab fa-twitter"></i></a></li>
     <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
     <li><a href="#"><i class="fab fa-instagram"></i></a></li>
   </ul>
 
-  <!-- Rodapé inferior -->
+
   <div class="footer-bottom">
   Copyright ©2025 All rights reserved | Augebit Company
 

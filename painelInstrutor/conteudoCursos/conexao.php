@@ -2,21 +2,20 @@
 include('conecta.php');
 date_default_timezone_set('America/Sao_Paulo');
 
-// Conexão com o banco
+
 $mysqli = new mysqli($host, $login, $password, $bd);
 if ($mysqli->connect_error) {
     die("Erro na conexão com o banco de dados: " . $mysqli->connect_error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Capturar dados do formulário
     $tituloAtiv = $_POST['tituloAtiv'] ?? '';
     $curso_id = (int)($_POST['curso_id'] ?? 0);
     $questoes = [];
     $descricoes = [];
     $imagens = [];
 
-    // Validar curso_id
+   
     if ($curso_id <= 0) {
         die("Erro: ID do curso inválido.");
     }
@@ -24,16 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     for ($i = 1; $i <= 10; $i++) {
         $questoes[$i] = $_POST["questao$i"] ?? '';
         $descricoes[$i] = $_POST["descricao$i"] ?? '';
-        $imagens[$i] = ''; // Inicialmente vazio
+        $imagens[$i] = ''; 
     }
 
-    // Diretório para upload das imagens
+    
     $uploadDir = 'uploads/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
-    // Processar upload das imagens
+   
     for ($i = 1; $i <= 10; $i++) {
         if (isset($_FILES["imagem$i"]) && $_FILES["imagem$i"]['error'] == 0) {
             $extensao = pathinfo($_FILES["imagem$i"]['name'], PATHINFO_EXTENSION);
@@ -46,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // Verificar se já existe atividade para este curso
+    
     $checkSql = "SELECT id FROM atividades WHERE curso_id = ? LIMIT 1";
     $checkStmt = $mysqli->prepare($checkSql);
     $checkStmt->bind_param("i", $curso_id);
@@ -54,10 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $checkStmt->get_result();
 
     if ($result->num_rows > 0) {
-        // ATUALIZAR - preservar imagens existentes se não foram enviadas novas
         $existingData = $result->fetch_assoc();
         
-        // Buscar imagens existentes
+       
         $sqlExisting = "SELECT * FROM atividades WHERE curso_id = ? LIMIT 1";
         $stmtExisting = $mysqli->prepare($sqlExisting);
         $stmtExisting->bind_param("i", $curso_id);
@@ -65,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $resultExisting = $stmtExisting->get_result();
         $existing = $resultExisting->fetch_assoc();
         
-        // Preservar imagens existentes se não foram enviadas novas
+       
         for ($i = 1; $i <= 10; $i++) {
             if (empty($imagens[$i]) && !empty($existing["imagem$i"])) {
                 $imagens[$i] = $existing["imagem$i"];
@@ -146,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $checkStmt->close();
 
 } else {
-    // CÓDIGO PARA EXIBIR DADOS (GET)
+    // GET
     $curso_id = isset($_GET['curso_id']) ? (int)$_GET['curso_id'] : 0;
     
     if ($curso_id > 0) {

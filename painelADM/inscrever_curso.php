@@ -108,7 +108,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       color: var(--primary);
     }
 
-    /* Form elements styling */
+  
     .formulario {
       display: flex;
       flex-direction: column;
@@ -362,7 +362,7 @@ $curso_selecionado = isset($_POST['curso_id']) ? intval($_POST['curso_id']) : ''
       padding: 2rem 1rem;
     }
 
-    /* Animation */
+   
     .animar-fadein {
       animation: fadeIn 0.5s ease-in-out;
     }
