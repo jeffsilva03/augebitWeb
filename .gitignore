@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+# Arquivos enviados por usuários
+**/uploads/avatars/user_*
+/painelInstrutor/uploads/
+/painelInstrutor/conteudoCursos/uploads/
+# Dumps locais com dados (a estrutura pública segue versionada)
+/backups/
+*.sql.gz
+*.sql.zip
